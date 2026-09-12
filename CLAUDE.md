@@ -17,6 +17,11 @@ Kemik oranlarını değiştirirken üç kuralı bozma, yoksa kemik okunmaz hale 
 - **Bel:** `2*shaftH / (2*(lobeDy+lobeR))` ≈ 0.35–0.45 (gövde topuzlardan belirgin ince olsun)
 - **Topuz çentiği:** `lobeDy / lobeR` ≈ 0.65–0.75 (uçtaki iki topuz ayrışsın ama sertleşmesin)
 Fazla tombullaştırınca (kısa + kalın gövde) şekil buluta dönüyor — bir kez oldu.
+
+Kemiğin yanına alet (matkap/tornavida) eklemek denendi ve **vazgeçildi**: bir matkabın
+silueti gövde–sap birleşiminden tanınır, çapraz düzende orayı kemik kapatıyor ve
+180 pikselde tanınmaz bir lekeye dönüyor. Üreticide `--variant=screw|screwring|tools`
+seçenekleri duruyor ama yüklü sürüm `rings` (halka + kemik). Tekrar denemeye gerek yok.
 Uygulama içindeki küçük işaret `index.html`'de satır içi SVG; küçük boyda okunurluk için
 sadeleştirilmiş (tek halka + daha büyük kemik). İkonun iki hali kasıtlı olarak farklı.
 
