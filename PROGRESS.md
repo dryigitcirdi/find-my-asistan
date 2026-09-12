@@ -68,6 +68,18 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
 
+## v3 — açılış ekranı ve mevcut sayımı düzeltmeleri (12.09.2026)
+- **Açılış ekranı:** uygulama her açılışta marka (kemik işareti + "Find My Asistan")
+  gösterip panele çözülüyor. Önceden isim yalnızca seçim ekranında ve panelin
+  en altında görünüyordu; kayıtlı hastaneyle açılınca hiç görünmüyordu.
+- **Kaydırma hatası:** yerleşim hazır olmadan `scrollLeft` ayarlanınca sessizce iptal
+  oluyor, üst bar "—" kalıyor ve ton ayarlanmıyordu. Artık başlık/nokta/ton kaydırma
+  konumundan bağımsız ayarlanıyor, kaydırma ise yerleşim hazır olana kadar deneniyor.
+- **Hafta sonu mevcudu:** kadrosu burada olup nöbeti başka hastanede olan kişi
+  "sahada" sayılıyordu; burada nöbetçi olan misafir ise sayılmıyordu. İkisi de düzeltildi.
+  Hafta sonu beklenen mevcut artık kadro değil, o günkü nöbetçi sayısı.
+- Kadrodaki biri başka hastanede nöbetçiyse hero satırı bunu söylüyor.
+
 ## İkon kararı (12.09.2026)
 Yüklü sürüm: **halka + ponçik kemik** (`--variant=rings`). Kemiğin yanına matkap/tornavida
 eklemek denendi, vazgeçildi — gerekçe `CLAUDE.md` içinde.

@@ -103,16 +103,20 @@ export function hospitalDay(db, hospitalId, date, opts = {}) {
   db.residents.forEach((r) => { if (assigned[r.id] === hospitalId) ids.add(r.id); });
   db.duties.forEach((x) => { if (x.d === date && x.h === hospitalId) ids.add(x.r); });
 
+  // Hafta sonu rutin mesai yok: o gun hastanede olan tek kisi nobetcidir.
+  const restDay = isWeekend(date) && !opts.weekendShift;
+
   const rows = [...ids].map((id) => {
     const day = residentDay(db, id, date, opts);
-    const dutyHere = day.duty && day.duty.h === hospitalId;
+    const dutyHere = Boolean(day.duty && day.duty.h === hospitalId);
     const basedHere = day.home === hospitalId;
     return {
       ...day,
       dutyHere,
       basedHere,
-      // Gunduz mesaisinde bu hastanede mi?
-      onSiteDay: basedHere && day.status.present,
+      // Bugun bu hastanede mi? Hafta sonu yalnizca buradaki nobetci sayilir;
+      // kadrosu burada olsa da nobeti baska hastanedeyse burada degildir.
+      onSiteDay: restDay ? dutyHere : (basedHere && day.status.present),
       // Sadece nobet icin bu hastaneye gelen misafir
       visiting: Boolean(dutyHere && !basedHere)
     };
@@ -125,8 +129,10 @@ export function hospitalDay(db, hospitalId, date, opts = {}) {
   const onSite = rows.filter((r) => r.onSiteDay);
   const onDuty = rows.filter((r) => r.dutyHere);
 
+  // Hafta sonu beklenen mevcut = o gun nobetci olanlar
+  const expected = restDay ? onDuty.length : kadro.length;
+
   // Ambiyans tonu: arka plan rengini bu belirler
-  const restDay = isWeekend(date) && !opts.weekendShift;
   let tone;
   if (kadro.length === 0 && onDuty.length === 0) tone = 'empty';
   else if (onDuty.length) tone = 'duty';
@@ -136,7 +142,7 @@ export function hospitalDay(db, hospitalId, date, opts = {}) {
   else tone = 'calm';
 
   return { hospitalId, date, rows, kadro, onSite, onDuty, tone, restDay,
-           expected: kadro.length, present: onSite.length };
+           expected, present: onSite.length };
 }
 
 /** Haftalik bar icin: asistan x 7 gun durum matrisi */

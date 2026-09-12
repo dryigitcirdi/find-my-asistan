@@ -6,6 +6,20 @@ import * as UI from './ui.js';
 import * as Sheet from './sheet.js';
 
 const params = new URLSearchParams(location.search);
+const BOOT_AT = performance.now();
+
+/** Açılış ekranı: marka en az bu kadar görünsün, sonra çözülsün */
+function dismissLaunch() {
+  const el = document.getElementById('launch');
+  if (!el || el.dataset.gone) return;
+  el.dataset.gone = '1';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wait = reduce ? 0 : Math.max(0, 620 - (performance.now() - BOOT_AT));
+  setTimeout(() => {
+    el.setAttribute('data-out', '');
+    setTimeout(() => { el.hidden = true; }, reduce ? 0 : 460);
+  }, wait);
+}
 
 /** Bugün — ?d=YYYY-MM-DD ile test için değiştirilebilir */
 function today() {
@@ -45,20 +59,30 @@ function goDay(hospitalId, keepScroll = false) {
   onDayScreen = true;
   UI.showScreen('day');
 
-  // Kaydırma konumu yerleşim hazır olduktan sonra ayarlanmalı
-  requestAnimationFrame(() => {
-    scrollToPage(index, false);
-    active = -1;
-    syncActive();
-  });
+  // Başlık/nokta/ton kaydırma konumuna bakmadan doğrudan ayarlanır.
+  // (Yerleşim hazır değilken scrollLeft okunamıyor; buna güvenmek ekranı "—" bırakıyordu.)
+  active = index;
+  UI.setActivePage(panels, index);
+  settleScroll(index);
 
   bindPagerScroll();
   startTicking();
 }
 
-function scrollToPage(i, smooth) {
+/** Yerleşim hazır olana kadar kaydırma konumunu ayarlamayı dener */
+function settleScroll(index, tries = 0) {
   const el = pager();
   if (!el) return;
+  if (!el.clientWidth) {
+    if (tries < 60) requestAnimationFrame(() => settleScroll(index, tries + 1));
+    return;
+  }
+  el.scrollTo({ left: index * el.clientWidth, behavior: 'auto' });
+}
+
+function scrollToPage(i, smooth) {
+  const el = pager();
+  if (!el || !el.clientWidth) return;
   el.scrollTo({ left: i * el.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
 }
 
@@ -71,7 +95,7 @@ function bindPagerScroll() {
     if (scrollFrame) return;
     scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; syncActive(); });
   }, { passive: true });
-  window.addEventListener('resize', () => { if (onDayScreen && active >= 0) scrollToPage(active, false); });
+  window.addEventListener('resize', () => { if (onDayScreen && active >= 0) settleScroll(active); });
 }
 
 function syncActive() {
@@ -111,6 +135,7 @@ function stopTicking() {
   try {
     await load();
   } catch (err) {
+    dismissLaunch();
     document.querySelector('.shell').innerHTML =
       `<div class="card empty-state"><p class="eyebrow">Hata</p><p>${err.message}</p>
        <p style="font-size:12px;margin-top:12px">Sayfayı bir sunucu üzerinden açman gerekiyor
@@ -123,6 +148,7 @@ function stopTicking() {
 
   const last = params.get('h') || settings().hospitalId;
   if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
+  dismissLaunch();
 
   // Sekmeye geri dönüldüğünde tarih/saat tazelensin, konum korunsun
   let lastDate = today();

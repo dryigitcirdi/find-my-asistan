@@ -728,3 +728,30 @@ body {
   color: var(--text-3);
 }
 .wordmark b { color: var(--text); font-weight: 640; }
+
+/* ---------- Açılış ekranı ---------- */
+.launch {
+  position: fixed; inset: 0; z-index: 60;
+  display: grid; place-items: center;
+  background: var(--ink);
+  transition: opacity .44s var(--ease-io);
+}
+.launch-inner {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  animation: launch-in .7s var(--ease) both;
+  transition: transform .44s var(--ease-io);
+}
+.launch-name {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  font-size: 19px; font-weight: 500; letter-spacing: -.014em;
+  color: var(--text-3);
+}
+.launch-name b { color: var(--text); font-weight: 640; }
+@keyframes launch-in {
+  from { opacity: 0; transform: scale(.9); }
+  to   { opacity: 1; transform: none; }
+}
+.launch[data-out] { opacity: 0; pointer-events: none; }
+.launch[data-out] .launch-inner { transform: scale(1.07); }
+.launch[hidden] { display: none; }

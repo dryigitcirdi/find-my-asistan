@@ -222,9 +222,15 @@ export function panelHTML(db, hospitalId, date, opts, flags = {}) {
   const np = nowPercent(wd);
 
   const dutyNames = d.onDuty.map((r) => db.residents.find((x) => x.id === r.residentId).short);
+  // Kadrosu burada ama nöbeti başka hastanede olanlar — gözlemci için önemli
+  const awayDuty = d.rows.filter((r) => r.onSiteDay && r.duty && r.duty.h !== hospitalId);
   let note;
   if (d.tone === 'empty') note = 'Bu hastane için kadro tanımlanmamış. Ayarlar’dan atama yapabilirsin.';
   else if (d.onDuty.length) note = `${dutyNames.join(', ')} nöbetçi · mesaiden ${wd.dutyLeave}’da çıkar`;
+  else if (awayDuty.length) {
+    const names = awayDuty.map((r) => db.residents.find((x) => x.id === r.residentId).short);
+    note = `${names.join(', ')} ${wd.dutyLeave}’da çıkar · nöbeti başka hastanede`;
+  }
   else if (d.restDay) note = 'Hafta sonu — rutin mesai yok.';
   else if (d.present === 0) note = 'Bugün kadrodan kimse sahada değil.';
   else if (d.present < d.expected) note = `${d.expected - d.present} kişi izinli, nöbet ertesi ya da rotasyonda.`;
