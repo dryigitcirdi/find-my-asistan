@@ -32,6 +32,12 @@ sadeleştirilmiş (tek halka + daha büyük kemik). İkonun iki hali kasıtlı o
 - Arayüz dili Türkçe.
 - Tıbbi klişe görsel yok (stok doktor, mavi-yeşil hastane teması vb.).
 
+## Ekran düzeni — neden böyle
+Panel, **asistan kartıyla başlar**. Kullanıcılar (18 hoca) kendi hastanesinin tek-iki
+asistanını görmek için açıyor; toplam sayaç onları aşağı itiyordu. Üstteki büyük sayaç
+kartı tek satırlık duruma indirildi. Kartın kendisi dört soruyu sırayla cevaplar:
+bugün nerede / kaçta çıkar → yarın ne olacak → bu hafta hangi gün yok.
+
 ## Mimari
 ```
 index.html            tek sayfa: seçim ekranı + yatay kaydırmalı hastane sayfaları
@@ -73,7 +79,10 @@ toplamlar tuttuğu için bunlar özet hücrelerindeki elle yazım kayması sayı
 ## Çalışma düzeni (varsayılan, Ayarlar'dan değiştirilebilir)
 - Mesai 08:00–18:00
 - Nöbetçi asistan gündüz mesaisinden **16:00**'da çıkar, akşam nöbete kalır
-- Nöbet ertesi gün izinli (kaynak tabloda açıkça listelenen günler esas alınır)
+- Nöbet ertesi gün izinli. Kaynak tablodaki liste esastır; **pazar nöbeti tutulduysa
+  ertesi pazartesi izni listede olmasa da türetilir** (`postCallOn` içinde). Kaynakta
+  12 pazar nöbetinin 10'unda izin yazılı, 2'si atlanmış — kural bu boşluğu kapatıyor.
+- Hafta sonu gündüz mesaisi yok; o gün hastanede olan tek kişi nöbetçidir.
 
 ## Önizleme
 ```bash

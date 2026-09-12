@@ -66,6 +66,13 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
 
+## v5 — gözlemci odaklı düzen (12.09.2026)
+- Panel artık **asistan kartıyla başlıyor**; büyük sayaç kartı tek satırlık duruma indi.
+  Hoca uygulamayı açınca ilk ekranda kendi asistanının durumunu görüyor.
+- Kartta düz cümleyle haftalık özet: "Bu hafta Çar yok · Sal ve Cum 16:00'da çıkar".
+- **Pazar nöbeti → pazartesi nöbet ertesi izni** kuralı motora eklendi; kaynak listedeki
+  kayıt esas, eksikse türetiliyor (kaynakta 2 pazar nöbetinin ertesi yazılmamış).
+
 ## v4 — kadro renk kodlarından okunuyor (12.09.2026)
 Rotasyon takviminde gündüz kadrosu hücre dolgu rengiyle tutuluyormuş. Artık 101 ay için
 kadro veride: Eylül 2026 → Müge Altunizade, Metehan Ataşehir, M. Oğuz Maslak,

@@ -255,25 +255,15 @@ export function panelHTML(db, hospitalId, date, opts) {
   else if (d.present < d.expected) note = `${d.expected - d.present} kişi izinli, nöbet ertesi ya da rotasyonda.`;
   else note = 'Kadronun tamamı sahada.';
 
+  // Tek satırlık durum şeridi — asıl içerik asistan kartları, sayaç onları itmesin
   const hero = `
-    <div class="card hero">
-      <div class="hero-head">
-        <div>
-          <p class="eyebrow">Şu an sahada</p>
-          <div class="hero-count"><b class="num" data-count="${d.present}">0</b><span>/ ${d.expected}</span></div>
-        </div>
-        <span class="hero-badge">${TONE_LABEL[d.tone]}</span>
-      </div>
-      <p class="hero-note">${esc(note)}</p>
-      <div class="daybar">
-        <div class="daybar-scale"><span>${wd.start}</span><span>12:00</span><span>${wd.dutyLeave}</span><span>${wd.end}</span></div>
-        <div class="track">
-          ${np.inside ? `<div class="track-fill" style="width:${np.value}%"></div>
-                         <div class="now now--pulse" style="left:${np.value}%"></div>` : ''}
-        </div>
-        ${np.inside ? '' : '<p class="hero-note" style="margin-top:9px;font-size:12.5px">Mesai dışı</p>'}
-      </div>
-    </div>`;
+    <div class="strip">
+      <i class="tone-dot" data-tone="${d.tone}"></i>
+      <b>${TONE_LABEL[d.tone]}</b>
+      ${d.expected ? `<span class="dotsep"></span><span class="num">${d.present} / ${d.expected} sahada</span>` : ''}
+      <span class="strip-clock num" data-clock>${np.inside ? '' : 'mesai dışı'}</span>
+    </div>
+    ${note ? `<p class="strip-note">${esc(note)}</p>` : ''}`;
 
   // Bu ay hiçbir hastanenin kadrosunda olmayanlar (dış rotasyon / tez dönemi)
   const assignedIds = new Set(Object.keys(db.assignments[month] || {}));
@@ -344,8 +334,6 @@ export function panelHTML(db, hospitalId, date, opts) {
     tone: d.tone,
     hue: h.hue,
     html: `${hero}
-      <div class="section-title"><h2>Kim nerede</h2>
-        <span class="eyebrow">${d.rows.length ? d.rows.length + ' kişi' : ''}</span></div>
       ${people}
       ${banner}
       ${week}

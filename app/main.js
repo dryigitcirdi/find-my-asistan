@@ -118,11 +118,17 @@ function openSettings() {
 /* ---- Canlı saat + "şu an" imleci ---- */
 function startTicking() {
   stopTicking();
-  timer = setInterval(() => {
+  const tick = () => {
     const wd = db().meta.workday;
     const np = UI.nowPercent(wd);
     document.querySelectorAll('.now').forEach((n) => { n.style.left = `${np.value}%`; });
-  }, 30000);
+    const saat = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+    document.querySelectorAll('[data-clock]').forEach((n) => {
+      n.textContent = np.inside ? saat : 'mesai dışı';
+    });
+  };
+  tick();
+  timer = setInterval(tick, 30000);
 }
 
 function stopTicking() {

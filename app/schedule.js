@@ -59,10 +59,29 @@ export const STATUS = {
  * Bir asistanin belirli bir gunku durumu.
  * Oncelik: yillik izin > nobet > nobet ertesi > dis rotasyon > hafta sonu > mesai
  */
+/**
+ * Nobet ertesi izni var mi?
+ * Kaynak listedeki kayit esastir. Pazar nobeti tutulduysa ertesi pazartesi
+ * izin kullanilir; liste bunu atlamis olabilir, o yuzden turetiliyor.
+ */
+export function postCallOn(db, residentId, date, opts = {}) {
+  if (db.postCall.some((x) => x.d === date && x.r === residentId)) {
+    return { off: true, derived: false };
+  }
+  const prev = addDays(date, -1);
+  if (parseIso(date).getDay() === 1 && parseIso(prev).getDay() === 0 &&
+      db.duties.some((x) => x.d === prev && x.r === residentId) &&
+      !opts.weekendShift) {
+    return { off: true, derived: true };
+  }
+  return { off: false, derived: false };
+}
+
 export function residentDay(db, residentId, date, opts = {}) {
   const settings = { weekendShift: false, ...opts };
   const duty = db.duties.find((x) => x.d === date && x.r === residentId) || null;
-  const post = db.postCall.some((x) => x.d === date && x.r === residentId);
+  const pc = postCallOn(db, residentId, date, settings);
+  const post = pc.off;
   const leave = db.leaves.find((x) => x.r === residentId && x.from <= date && date <= x.to) || null;
   const rotation = db.rotations.find((x) => x.r === residentId && x.month === monthKey(date)) || null;
   const weekend = isWeekend(date);
@@ -86,13 +105,14 @@ export function residentDay(db, residentId, date, opts = {}) {
     residentId, date, home,
     duty, rotation, leave,
     postCall: post,
+    postCallDerived: pc.derived,
     weekend,
     status,
     leaveTime,
     // Kaynak tabloda ayni gun hem nobet hem nobet ertesi izin yaziyorsa
     conflict: Boolean(duty && post),
     // Nobet ertesi izin gercekten listelenmis mi?
-    nextDayOff: db.postCall.some((x) => x.r === residentId && x.d === addDays(date, 1))
+    nextDayOff: postCallOn(db, residentId, addDays(date, 1), settings).off
   };
 }
 
