@@ -1,18 +1,18 @@
-# Yayına alma — GitHub Pages
+# Find My Asistan — yayına alma (GitHub Pages)
 
-Hedef adres: **https://dryigitcirdi.github.io/asistan-panel/**
+Hedef adres: **https://dryigitcirdi.github.io/find-my-asistan/**
 
 Depo hazır ve commit'lendi. Kalan 3 adım GitHub hesabında yapılmalı
 (depo oluşturma ve anahtar yetkilendirme senin onayını gerektiriyor):
 
 ### 1. Depoyu oluştur
 https://github.com/new adresinde:
-- **Repository name:** `asistan-panel`
+- **Repository name:** `find-my-asistan`
 - **Public** seç (ücretsiz planda GitHub Pages yalnızca public depolarda çalışır)
 - README / .gitignore / lisans **ekleme** — depo boş kalsın
 
 ### 2. Dağıtım anahtarını ekle
-`https://github.com/dryigitcirdi/asistan-panel/settings/keys/new` adresinde:
+`https://github.com/dryigitcirdi/find-my-asistan/settings/keys/new` adresinde:
 - **Title:** `asistan-panel deploy`
 - **Key:** aşağıdaki satırı olduğu gibi yapıştır
 - **Allow write access** kutusunu **işaretle**
@@ -22,7 +22,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEdPz0kfq8PwFihMyTHjgWYnv/9ywWJgP6LisdF4b0vp
 ```
 
 ### 3. GitHub Pages'i aç
-`https://github.com/dryigitcirdi/asistan-panel/settings/pages` adresinde:
+`https://github.com/dryigitcirdi/find-my-asistan/settings/pages` adresinde:
 - **Source:** `Deploy from a branch`
 - **Branch:** `main` / `(root)` → Save
 
@@ -40,7 +40,8 @@ site adresi arama motorlarına kapalı (`robots.txt` + `noindex` eklendi), ama
 **deponun içeriği github.com üzerinde herkese açık ve GitHub aramasında bulunabilir** —
 yani `data/schedule.json` içindeki asistan isimleri ve izin tarihleri de.
 
-İsimleri dışarıya kapatmak istersen, yayınlamadan önce:
+Bunu konuştuk: panel 18 hoca + 6 asistan tarafından kullanılacağı ve isimlerin
+görünmesi işin özü olduğu için açık bırakıldı. Yine de kapatmak istersen:
 ```bash
 node tools/anonymize.js
 ```

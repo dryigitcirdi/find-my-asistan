@@ -1,6 +1,7 @@
-# Asistan Paneli
+# Find My Asistan
 
 iPhone ana ekranına kısayol olarak eklenebilen, tek sayfalık (PWA) asistan nöbet/izin paneli.
+Yerel klasör `asistan-panel`, GitHub deposu `find-my-asistan` (isim sonradan değişti).
 Acıbadem Üniversitesi Ortopedi ve Travmatoloji — 4 hastane, 6 asistan.
 
 **Her oturumun başında `PROGRESS.md` dosyasını oku**, hangi fazda kalındığını oradan öğren ve
@@ -15,11 +16,13 @@ iş bitirdikçe oradaki kutucukları güncelle.
 
 ## Mimari
 ```
-index.html            tek sayfa, ekranlar <section data-screen> olarak
+index.html            tek sayfa: seçim ekranı + yatay kaydırmalı hastane sayfaları
 styles/app.css        tüm stil; renkler CSS değişkeni (--accent, --ambient-*)
 app/data.js           schedule.json'u yükler + kullanıcı düzenlemelerini (localStorage) birleştirir
 app/schedule.js       durum motoru — saf fonksiyonlar, DOM bilmez
-app/ui.js             render
+app/ui.js             render — panelHTML() bir hastane sayfası üretir, renderPager() dördünü kurar
+app/sheet.js          asistan detayı ve ayarlar alt sayfası
+tools/make-icons.js   PWA ikonlarını üretir (bağımlılıksız PNG yazıcı)
 app/main.js           yönlendirme + olaylar
 data/schedule.json    Drive'dan aktarılan nöbet/izin/rotasyon verisi
 ```

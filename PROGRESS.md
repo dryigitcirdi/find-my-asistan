@@ -1,4 +1,4 @@
-# Asistan Paneli — İlerleme Takibi
+# Find My Asistan — İlerleme Takibi
 
 > Bu dosya **oturum kesilirse kaldığı yerden devam** edebilmek için var.
 > Yeni bir Claude Code oturumu açıldığında önce `CLAUDE.md` + bu dosya okunur.
@@ -16,10 +16,12 @@
 | 7 | Yayına alma (GitHub Pages / Vercel) + iPhone kısayolu | ⬜ Bekliyor |
 
 ## Yapılacaklar (sıradaki)
-- [ ] **Yayın** — karar verildi: GitHub Pages + noindex, tam isimlerle.
-      Depo hazır, commit'lendi, remote tanımlı. `DEPLOY.md` içindeki 3 adım
-      (depo oluştur → dağıtım anahtarını ekle → Pages'i aç) kullanıcıda.
-      Sonrasında: `git -C . push -u origin main`
+- [ ] **Yayın** — GitHub Pages + noindex, tam isimlerle. Depo adı `find-my-asistan`.
+      `DEPLOY.md` içindeki 3 adım (depo oluştur → dağıtım anahtarını ekle → Pages'i aç)
+      kullanıcıda. Sonrasında: `git -C . push -u origin main`
+- [ ] **Kalan 5 asistanın kadrosu** — Metehan (Ataşehir) doğrulandı, diğerleri hâlâ tahmin.
+      Kullanıcıya soruldu, cevap gelmedi. Ayarlar'daki düzeltme localStorage'da kaldığı
+      ve panel 18 kişiyle paylaşılacağı için doğru değer `data/schedule.json` içine yazılmalı.
 - [ ] Ekim 2026 nöbet listesi çıkınca `data/schedule.json` güncellemesi
 - [ ] İsteğe bağlı: Drive'dan otomatik senkron (şu an elle aktarım)
 
