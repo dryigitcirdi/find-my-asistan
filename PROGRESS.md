@@ -1,0 +1,50 @@
+# Asistan Paneli — İlerleme Takibi
+
+> Bu dosya **oturum kesilirse kaldığı yerden devam** edebilmek için var.
+> Yeni bir Claude Code oturumu açıldığında önce `CLAUDE.md` + bu dosya okunur.
+
+## Durum: FAZ 7 / 7 — yayına alma kaldı
+
+| # | Faz | Durum |
+|---|-----|-------|
+| 1 | Drive verisinin çekilmesi ve ayrıştırılması | ✅ Bitti |
+| 2 | Veri modeli + `data/schedule.json` | ✅ Bitti |
+| 3 | Durum motoru (`app/schedule.js`) | ✅ Bitti |
+| 4 | Arayüz: hastane seçimi + bugün paneli | ✅ Bitti |
+| 5 | Haftalık bar + asistan detayı + ayarlar | ✅ Bitti |
+| 6 | PWA (manifest, ikon, service worker, offline) | ✅ Bitti |
+| 7 | Yayına alma (GitHub Pages / Vercel) + iPhone kısayolu | ⬜ Bekliyor |
+
+## Yapılacaklar (sıradaki)
+- [ ] **Yayın kararı** — nerede barındırılacak? (kullanıcıya soruldu, cevap bekleniyor)
+      Veri personel ismi + izin tarihi içeriyor; herkese açık URL'e dikkat.
+- [ ] Ekim 2026 nöbet listesi çıkınca `data/schedule.json` güncellemesi
+- [ ] İsteğe bağlı: Drive'dan otomatik senkron (şu an elle aktarım)
+
+## Yerel çalıştırma
+```bash
+node /Users/yigit/Desktop/cod/asistan-panel/serve.js 4173
+```
+Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
+
+## Kaynak veri
+- Drive klasörü: `Üniversite / Asistan takip`
+  - `Asistan Nöbet Tarihleri` (Sheets, id `1FKxsJKmOxqE2dlPU5rRyudSZq1uXbrBR1BX3mzrODUs`)
+    - Sayfa 1 = Ağustos 2026, Sayfa 2 = Eylül 2026, Sayfa 3-5 boş şablon
+  - `Asistan Rotasyon Takvimi` (Sheets, id `1Wjg4AtHUv4S1BbjmmCrvQzEbmYpuR6KDM2vcLvyFVPM`)
+    - 2021-01 … 2030-12 aylık dış rotasyon matrisi + yıllık izin tablosu
+- Veri **elle** `data/schedule.json` içine aktarıldı (otomatik senkron henüz yok).
+
+## Veriden çıkan bilinen sorunlar (kaynakta düzeltilmeli)
+1. **TKY** `13/06/2026` → Eylül sayfasında, `13/09/2026` olarak alındı.
+2. **TKY** `10/09/2026` hem Altunizade nöbeti hem de nöbet ertesi izin.
+3. **MOÇ** `02/09/2026` hem Atakent nöbeti hem de nöbet ertesi izin.
+4. **MOÇ** Ağustos sayfasında Eylül tarihleri yazılı → Ağustos nöbeti yok sayıldı.
+5. **TY** `5/082/2026` → `05/08/2026` olarak alındı.
+6. Ataşehir sütunu her iki ayda da tamamen boş.
+7. Rotasyon tablosunda **Can Eser** satırı yok (sadece izin tablosunda var).
+
+## Veride OLMAYAN, kullanıcıdan alınacak bilgiler
+- Hangi asistanın hangi hastanede **günlük kadroda** olduğu → şu an nöbet dağılımından tahmin
+  ediliyor (`assignments`), uygulama içi Ayarlar'dan düzeltilebilir.
+- Her hastanenin **asistan sorumlusu** → boş, Ayarlar'dan seçilecek.

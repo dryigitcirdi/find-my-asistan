@@ -1,0 +1,45 @@
+# Asistan Paneli
+
+iPhone ana ekranına kısayol olarak eklenebilen, tek sayfalık (PWA) asistan nöbet/izin paneli.
+Acıbadem Üniversitesi Ortopedi ve Travmatoloji — 4 hastane, 6 asistan.
+
+**Her oturumun başında `PROGRESS.md` dosyasını oku**, hangi fazda kalındığını oradan öğren ve
+iş bitirdikçe oradaki kutucukları güncelle.
+
+## Kurallar
+- **Derleme adımı yok.** Saf HTML + CSS + ES modülleri. Framework, bundler, npm bağımlılığı ekleme.
+- Animasyonlar yalnızca `transform` ve `opacity` üzerinden — 60fps korunmalı.
+- `prefers-reduced-motion` her animasyonda dikkate alınmalı.
+- Arayüz dili Türkçe.
+- Tıbbi klişe görsel yok (stok doktor, mavi-yeşil hastane teması vb.).
+
+## Mimari
+```
+index.html            tek sayfa, ekranlar <section data-screen> olarak
+styles/app.css        tüm stil; renkler CSS değişkeni (--accent, --ambient-*)
+app/data.js           schedule.json'u yükler + kullanıcı düzenlemelerini (localStorage) birleştirir
+app/schedule.js       durum motoru — saf fonksiyonlar, DOM bilmez
+app/ui.js             render
+app/main.js           yönlendirme + olaylar
+data/schedule.json    Drive'dan aktarılan nöbet/izin/rotasyon verisi
+```
+
+## Çalışma düzeni (varsayılan, Ayarlar'dan değiştirilebilir)
+- Mesai 08:00–18:00
+- Nöbetçi asistan gündüz mesaisinden **16:00**'da çıkar, akşam nöbete kalır
+- Nöbet ertesi gün izinli (kaynak tabloda açıkça listelenen günler esas alınır)
+
+## Önizleme
+```bash
+node /Users/yigit/Desktop/cod/asistan-panel/serve.js 4173
+```
+ES modülleri `file://` üzerinden çalışmaz, mutlaka sunucu üzerinden aç.
+Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
+
+## Geliştirirken dikkat
+Service worker kabuk dosyalarını önbelleğe alır. CSS/JS değişikliği tarayıcıda görünmüyorsa
+`sw.js` içindeki `VERSION` sabitini artır ya da konsolda:
+```js
+(await navigator.serviceWorker.getRegistrations()).forEach(r => r.unregister());
+(await caches.keys()).forEach(k => caches.delete(k));
+```

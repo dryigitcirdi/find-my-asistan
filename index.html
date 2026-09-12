@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="tr" data-tone="calm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Asistan Paneli</title>
+<meta name="description" content="Ortopedi asistan nöbet, izin ve kadro paneli.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+
+<meta name="theme-color" content="#05060a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Asistan">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="icon" href="assets/icon-192.png" sizes="192x192">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles/app.css">
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="orb orb--a"></div>
+  <div class="orb orb--b"></div>
+  <div class="orb orb--c"></div>
+</div>
+
+<main class="shell">
+
+  <!-- ========== 1. Hastane seçimi ========== -->
+  <section class="screen" data-screen="hospitals" data-active>
+    <header>
+      <p class="eyebrow" id="org-line">Acıbadem Üniversitesi · Ortopedi</p>
+      <h1 class="display">Bugün<br>neredesin?</h1>
+      <p class="subline" id="pick-date"></p>
+    </header>
+    <div class="hospital-grid stagger" id="hospital-grid"></div>
+    <p class="foot" id="pick-foot"></p>
+  </section>
+
+  <!-- ========== 2. Günün paneli ========== -->
+  <section class="screen" data-screen="day">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-back" aria-label="Hastane değiştir">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <span class="clock num" id="clock"></span>
+      <button class="icon-btn" id="btn-settings" aria-label="Ayarlar">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9v.01a1.7 1.7 0 0 0 1.56 1.03H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.03z"/>
+        </svg>
+      </button>
+    </div>
+
+    <header style="margin-top:16px">
+      <p class="eyebrow" id="day-date"></p>
+      <h1 class="display" id="day-hospital"></h1>
+    </header>
+
+    <div class="card hero" id="hero"></div>
+
+    <div class="section-title"><h2>Kim nerede</h2><span class="eyebrow" id="people-count"></span></div>
+    <div class="people" id="people"></div>
+
+    <div class="section-title"><h2>Bu hafta</h2><span class="eyebrow" id="week-range"></span></div>
+    <div class="card week" id="week"></div>
+
+    <div class="card notes" id="notes"></div>
+    <p class="foot" id="day-foot"></p>
+  </section>
+
+</main>
+
+<script type="module" src="app/main.js"></script>
+</body>
+</html>

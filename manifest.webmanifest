@@ -1,0 +1,17 @@
+{
+  "name": "Ortopedi Asistan Paneli",
+  "short_name": "Asistan",
+  "description": "Hangi asistan bugün hangi hastanede — nöbet, izin ve kadro paneli.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#05060a",
+  "theme_color": "#05060a",
+  "lang": "tr",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,3 @@
+# Arama motorlarına kapalı — personel çizelgesi içerir.
+User-agent: *
+Disallow: /
