@@ -320,7 +320,8 @@ export function panelHTML(db, hospitalId, date, opts, flags = {}) {
         <ul>${[...conflicts, ...db.dataNotes].map((n) => `<li>${esc(n)}</li>`).join('')}</ul>
       </div>
       ${hint}
-      <p class="foot">${esc(db.meta.source)}<br>Mesai ${wd.start}–${wd.end} · nöbetçi çıkışı ${wd.dutyLeave}</p>`
+      <p class="foot"><b style="color:var(--text-2);font-weight:600">Find My Asistan</b><br>
+        ${esc(db.meta.source)}<br>Mesai ${wd.start}–${wd.end} · nöbetçi çıkışı ${wd.dutyLeave}</p>`
   };
 }
 

@@ -715,3 +715,16 @@ body {
   transition: transform .3s var(--spring);
 }
 .banner button:active { transform: scale(.94); }
+
+/* ---------- Marka ---------- */
+.wordmark {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 15px; color: var(--text-2);
+}
+.wordmark svg { flex: none; }
+.wordmark span {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  font-size: 15px; font-weight: 500; letter-spacing: -.012em;
+  color: var(--text-3);
+}
+.wordmark b { color: var(--text); font-weight: 640; }
