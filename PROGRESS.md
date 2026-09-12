@@ -3,7 +3,7 @@
 > Bu dosya **oturum kesilirse kaldığı yerden devam** edebilmek için var.
 > Yeni bir Claude Code oturumu açıldığında önce `CLAUDE.md` + bu dosya okunur.
 
-## Durum: FAZ 7 / 7 — yayına alma kaldı
+## Durum: FAZ 7 / 7 — GitHub tarafı bekleniyor
 
 | # | Faz | Durum |
 |---|-----|-------|
@@ -16,8 +16,10 @@
 | 7 | Yayına alma (GitHub Pages / Vercel) + iPhone kısayolu | ⬜ Bekliyor |
 
 ## Yapılacaklar (sıradaki)
-- [ ] **Yayın kararı** — nerede barındırılacak? (kullanıcıya soruldu, cevap bekleniyor)
-      Veri personel ismi + izin tarihi içeriyor; herkese açık URL'e dikkat.
+- [ ] **Yayın** — karar verildi: GitHub Pages + noindex, tam isimlerle.
+      Depo hazır, commit'lendi, remote tanımlı. `DEPLOY.md` içindeki 3 adım
+      (depo oluştur → dağıtım anahtarını ekle → Pages'i aç) kullanıcıda.
+      Sonrasında: `git -C . push -u origin main`
 - [ ] Ekim 2026 nöbet listesi çıkınca `data/schedule.json` güncellemesi
 - [ ] İsteğe bağlı: Drive'dan otomatik senkron (şu an elle aktarım)
 
@@ -48,3 +50,9 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Hangi asistanın hangi hastanede **günlük kadroda** olduğu → şu an nöbet dağılımından tahmin
   ediliyor (`assignments`), uygulama içi Ayarlar'dan düzeltilebilir.
 - Her hastanenin **asistan sorumlusu** → boş, Ayarlar'dan seçilecek.
+
+## Kararlar
+- **16:00 kuralı** (kullanıcı onayladı 12.09.2026): nöbetçi asistan gündüz mesaisinden
+  16:00'da çıkar, geceyi nöbette geçirir, ertesi gün izinlidir.
+- **Barındırma** (kullanıcı seçti): GitHub Pages, public depo, `robots.txt` + `noindex`,
+  isimler tam hâliyle. Anonim sürüm isteyen olursa `node tools/anonymize.js`.

@@ -124,7 +124,18 @@ function leaveLabel(p) {
   return { big: '—', small: 'yok' };
 }
 
-function subtitle(db, p) {
+/** Türkçe bulunma hâli eki: Maslak'ta, Atakent'te, Altunizade'de, Ataşehir'de */
+function locative(name) {
+  const vowels = 'aeıioöuüAEIİOÖUÜ';
+  const back = 'aıouAIOU';
+  const hard = 'fçhkpsştFÇHKPSŞT';
+  const last = [...name].reverse().find((c) => vowels.includes(c)) || 'e';
+  const ek = (back.includes(last) ? 'a' : 'e');
+  const d = hard.includes(name[name.length - 1]) ? 't' : 'd';
+  return `${name}'${d}${ek}`;
+}
+
+function subtitle(db, p, hospitalId) {
   const bits = [];
   if (p.status.id === 'nobetci') {
     bits.push(`${p.leaveTime}'da çıkar`);
@@ -138,6 +149,11 @@ function subtitle(db, p) {
     bits.push(`${S.formatLongDate(p.leave.from)} – ${S.formatLongDate(p.leave.to)}`);
   } else if (p.status.id === 'rotasyon') {
     bits.push(`${db.rotationNames[p.rotation.name] || p.rotation.name} rotasyonunda`);
+  }
+  // Kadrosu burada ama nöbeti başka hastanede
+  if (p.duty && p.duty.h !== hospitalId) {
+    const other = db.hospitals.find((h) => h.id === p.duty.h);
+    if (other) bits.unshift(`nöbeti ${locative(other.name)}`);
   }
   if (p.rotation && p.status.id !== 'rotasyon' && p.status.id !== 'izinli') {
     bits.push(`${db.rotationNames[p.rotation.name] || p.rotation.name} rotasyonunda`);
@@ -208,7 +224,7 @@ export function renderDay(db, hospitalId, date, opts, handlers) {
       const r = db.residents.find((x) => x.id === p.residentId);
       const person = { ...p, hue: r.hue };
       const t = leaveLabel(p);
-      const subs = subtitle(db, p);
+      const subs = subtitle(db, p, hospitalId);
       return `
         <button class="person" data-id="${r.id}" style="--rh:${r.hue}"${p.status.present ? '' : ' data-dim'}>
           <div class="p-row">
