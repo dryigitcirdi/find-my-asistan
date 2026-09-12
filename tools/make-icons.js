@@ -41,15 +41,16 @@ function draw(S) {
 
   // Ortadaki kemik — geometri (döndürülmemiş, merkez orijinde)
   const bone = {
-    halfSpan: S * 0.143,   // lobe merkezlerinin yatay uzaklığı + lobe yarıçapı
-    lobeR:    S * 0.057,   // lobe (topuz) yarıçapı
-    shaftH:   S * 0.037,   // gövde yarı kalınlığı
-    lobeDy:   S * 0.033,   // lobe merkezlerinin dikey ayrımı
-    tilt:     -26 * Math.PI / 180
+    halfSpan: S * 0.152,   // lobe merkezlerinin yatay uzaklığı + lobe yarıçapı
+    lobeR:    S * 0.066,   // lobe (topuz) yarıçapı
+    shaftH:   S * 0.042,   // gövde yarı kalınlığı
+    lobeDy:   S * 0.046,   // lobe merkezlerinin dikey ayrımı
+    tilt:     -22 * Math.PI / 180
   };
   bone.lobeDx = bone.halfSpan - bone.lobeR;
   const cosT = Math.cos(bone.tilt), sinT = Math.sin(bone.tilt);
-  const ivory = [255, 242, 223];
+  const ivoryTop = [255, 251, 243];   // üstte ışık alan yüz
+  const ivoryBot = [240, 219, 191];   // altta gölgeli yüz
 
   // noktadan doğru parçasına uzaklık (gövde için)
   const segDist = (px, py, ax) => {
@@ -87,7 +88,11 @@ function draw(S) {
       if (dl < sd) sd = dl;
     }
     const boneCover = clamp01(0.5 - sd);
-    if (boneCover > 0) col = mix(col, ivory, boneCover);
+    if (boneCover > 0) {
+      // yumuşak dikey ışık geçişi — peluş hissi
+      const shade = clamp01(0.5 - ly / (2 * (bone.lobeDy + bone.lobeR)));
+      col = mix(col, mix(ivoryBot, ivoryTop, Math.pow(shade, 0.85)), boneCover);
+    }
 
     const o = (y * S + x) * 4;
     buf[o] = Math.round(col[0]); buf[o+1] = Math.round(col[1]); buf[o+2] = Math.round(col[2]); buf[o+3] = 255;

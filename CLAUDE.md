@@ -8,9 +8,15 @@ Acıbadem Üniversitesi Ortopedi ve Travmatoloji — 4 hastane, 6 asistan.
 iş bitirdikçe oradaki kutucukları güncelle.
 
 ## İkon ve marka
-Konum işareti: eş merkezli halkalar + ortada fildişi bir kemik (ortopedi göndermesi),
+Konum işareti: eş merkezli halkalar + ortada tombul fildişi bir kemik (ortopedi göndermesi),
 arkasında kehribar hale. `node tools/make-icons.js` 180/192/512 PNG üretir — bağımlılık yok,
-geometri dosyanın başındaki `bone` nesnesinden ayarlanır.
+geometri `bone` nesnesinden ayarlanır.
+
+Kemik oranlarını değiştirirken üç kuralı bozma, yoksa kemik okunmaz hale gelir:
+- **Orta boşluk:** `halfSpan - lobeR > lobeR` (iki uç birbirine yapışmasın)
+- **Bel:** `2*shaftH / (2*(lobeDy+lobeR))` ≈ 0.35–0.45 (gövde topuzlardan belirgin ince olsun)
+- **Topuz çentiği:** `lobeDy / lobeR` ≈ 0.65–0.75 (uçtaki iki topuz ayrışsın ama sertleşmesin)
+Fazla tombullaştırınca (kısa + kalın gövde) şekil buluta dönüyor — bir kez oldu.
 Uygulama içindeki küçük işaret `index.html`'de satır içi SVG; küçük boyda okunurluk için
 sadeleştirilmiş (tek halka + daha büyük kemik). İkonun iki hali kasıtlı olarak farklı.
 

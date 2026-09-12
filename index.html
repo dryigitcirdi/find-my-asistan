@@ -33,12 +33,15 @@
       <div class="wordmark">
         <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
           <!-- Küçük boyda sadeleşmiş işaret: tek halka + kemik -->
+          <defs><linearGradient id="bone-g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fffbf3"/><stop offset="1" stop-color="#f0dbbf"/>
+          </linearGradient></defs>
           <circle cx="12" cy="12" r="10.4" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"/>
-          <circle cx="12" cy="12" r="7.4" fill="hsl(32 94% 58%)" opacity=".18"/>
-          <g transform="rotate(-26 12 12)" fill="#fff2df">
-            <rect x="8.3" y="10.4" width="7.4" height="3.2" rx="1.6"/>
-            <circle cx="8.3" cy="10.55" r="2.5"/><circle cx="8.3" cy="13.45" r="2.5"/>
-            <circle cx="15.7" cy="10.55" r="2.5"/><circle cx="15.7" cy="13.45" r="2.5"/>
+          <circle cx="12" cy="12" r="7.6" fill="hsl(32 94% 58%)" opacity=".2"/>
+          <g transform="rotate(-22 12 12)" fill="url(#bone-g)">
+            <rect x="8.28" y="10.19" width="7.44" height="3.62" rx="1.81"/>
+            <circle cx="8.28" cy="10.01" r="2.85"/><circle cx="8.28" cy="13.99" r="2.85"/>
+            <circle cx="15.72" cy="10.01" r="2.85"/><circle cx="15.72" cy="13.99" r="2.85"/>
           </g>
         </svg>
         <span>Find My <b>Asistan</b></span>
