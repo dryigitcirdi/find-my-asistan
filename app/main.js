@@ -13,46 +13,88 @@ function today() {
   return /^\d{4}-\d{2}-\d{2}$/.test(forced || '') ? forced : S.iso(new Date());
 }
 
-let current = null;   // secili hastane
+let panels = [];      // hastane sayfalari
+let active = -1;      // gorunur sayfa
 let timer = null;
+let onDayScreen = false;
+
+const pager = () => document.getElementById('pager');
+
+/* ---------------- Hastane seçim ekranı ---------------- */
 
 function goHospitals() {
-  current = null;
-  update({ hospitalId: null });
+  onDayScreen = false;
   stopTicking();
-  UI.renderHospitals(db(), today(), opts(), goDay);
+  UI.renderHospitals(db(), today(), opts(), (id) => goDay(id));
   UI.setTone('pick', null);
   UI.showScreen('hospitals');
-  history.replaceState({ screen: 'hospitals' }, '', location.pathname + location.search);
 }
 
-function goDay(hospitalId) {
-  current = hospitalId;
-  update({ hospitalId });
-  UI.renderDay(db(), hospitalId, today(), opts(), { onPerson });
+/* ---------------- Yatay kaydırmalı hastane sayfaları ---------------- */
+
+function goDay(hospitalId, keepScroll = false) {
+  const d = db();
+  const index = Math.max(0, d.hospitals.findIndex((h) => h.id === hospitalId));
+
+  panels = UI.renderPager(d, today(), opts(), {
+    onPerson: (rid) => Sheet.openResident(db(), rid, today(), opts()),
+    onSettings: openSettings,
+    onGoto: (i) => scrollToPage(i, true)
+  }, { kadroUnconfirmed: !settings().kadroConfirmed });
+
+  onDayScreen = true;
   UI.showScreen('day');
+
+  // Kaydırma konumu yerleşim hazır olduktan sonra ayarlanmalı
+  requestAnimationFrame(() => {
+    scrollToPage(index, false);
+    active = -1;
+    syncActive();
+  });
+
+  bindPagerScroll();
   startTicking();
-  history.replaceState({ screen: 'day', hospitalId }, '', location.pathname + location.search);
 }
 
-function onPerson(residentId) {
-  Sheet.openResident(db(), residentId, today(), opts());
+function scrollToPage(i, smooth) {
+  const el = pager();
+  if (!el) return;
+  el.scrollTo({ left: i * el.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
+}
+
+let scrollFrame = 0;
+function bindPagerScroll() {
+  const el = pager();
+  if (!el || el.dataset.bound) return;
+  el.dataset.bound = '1';
+  el.addEventListener('scroll', () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; syncActive(); });
+  }, { passive: true });
+  window.addEventListener('resize', () => { if (onDayScreen && active >= 0) scrollToPage(active, false); });
+}
+
+function syncActive() {
+  const el = pager();
+  if (!el || !el.clientWidth) return;
+  const i = Math.round(el.scrollLeft / el.clientWidth);
+  if (i === active || !panels[i]) return;
+  active = i;
+  UI.setActivePage(panels, i);
+  update({ hospitalId: panels[i].h.id });
+}
+
+function openSettings() {
+  Sheet.openSettings(db(), today(), () => {
+    if (onDayScreen) goDay(panels[active] ? panels[active].h.id : settings().hospitalId);
+    else goHospitals();
+  });
 }
 
 /* ---- Canlı saat + "şu an" imleci ---- */
-function tickClock() {
-  const el = document.getElementById('clock');
-  if (el) {
-    el.textContent = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-  }
-}
-
 function startTicking() {
   stopTicking();
-  tickClock();
   timer = setInterval(() => {
-    tickClock();
-    if (!current) return;
     const wd = db().meta.workday;
     const np = UI.nowPercent(wd);
     document.querySelectorAll('.now').forEach((n) => { n.style.left = `${np.value}%`; });
@@ -72,23 +114,25 @@ function stopTicking() {
     document.querySelector('.shell').innerHTML =
       `<div class="card empty-state"><p class="eyebrow">Hata</p><p>${err.message}</p>
        <p style="font-size:12px;margin-top:12px">Sayfayı bir sunucu üzerinden açman gerekiyor
-       (<code>python3 -m http.server</code>), doğrudan dosya olarak değil.</p></div>`;
+       (<code>node serve.js</code>), doğrudan dosya olarak değil.</p></div>`;
     return;
   }
 
-  document.getElementById('btn-back').addEventListener('click', goHospitals);
-  document.getElementById('btn-settings').addEventListener('click', () => {
-    // Ayarlar kapandığında ekranı güncel verilerle yeniden çiz
-    Sheet.openSettings(db(), today(), () => { if (current) goDay(current); else goHospitals(); });
-  });
+  document.getElementById('btn-grid').addEventListener('click', goHospitals);
+  document.getElementById('btn-settings').addEventListener('click', openSettings);
 
   const last = params.get('h') || settings().hospitalId;
-  const valid = db().hospitals.some((h) => h.id === last);
-  if (valid) goDay(last); else goHospitals();
+  if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
 
-  // Sekmeye geri dönüldüğünde tarihi/saati tazele
+  // Sekmeye geri dönüldüğünde tarih/saat tazelensin, konum korunsun
+  let lastDate = today();
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && current) goDay(current);
+    if (document.visibilityState !== 'visible') return;
+    if (today() !== lastDate) {                 // gün değişmiş
+      lastDate = today();
+      if (onDayScreen) goDay(panels[active] ? panels[active].h.id : settings().hospitalId);
+      else goHospitals();
+    }
   });
 
   // Çevrimdışı çalışma (yalnızca http/https üzerinden)

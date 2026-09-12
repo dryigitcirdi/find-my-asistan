@@ -51,6 +51,18 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
   ediliyor (`assignments`), uygulama içi Ayarlar'dan düzeltilebilir.
 - Her hastanenin **asistan sorumlusu** → boş, Ayarlar'dan seçilecek.
 
+## v2 — gözlemci odaklı sürüm (12.09.2026)
+- Hastaneler arası **yatay kaydırma** (CSS scroll-snap): ilk sayfa hatırlanan hastane,
+  yana kaydırınca diğerleri. Başlık, noktalar ve arka plan tonu kaydırmayla değişir.
+- Her asistan kartında **"Yarın →" şeridi**: ertesi gün nöbetçi mi, izinli mi, gelmiyor mu.
+- **Metehan Akdağ Ataşehir kadrosunda** (kullanıcı düzeltmesi). Ataşehir'de nöbet
+  tutulmuyor; Ataşehir asistanı nöbetlerini diğer hastanelerde tutuyor.
+  → **Nöbet yeri kadroyu göstermez**; kalan 5 asistanın kadrosu hâlâ tahmin.
+- Kadro doğrulanmadıysa panelde uyarı şeridi çıkar; Ayarlar'dan "doğrula" ile kapanır.
+- Asistan sorumlusu alanı "isteğe bağlı" olarak geri plana alındı.
+- Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
+  isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
+
 ## Kararlar
 - **16:00 kuralı** (kullanıcı onayladı 12.09.2026): nöbetçi asistan gündüz mesaisinden
   16:00'da çıkar, geceyi nöbette geçirir, ertesi gün izinlidir.

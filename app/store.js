@@ -7,7 +7,7 @@ const DEFAULTS = {
   workday: null,           // { start, end, dutyLeave } — null ise veri dosyasindaki kullanilir
   assignments: {},         // { 'YYYY-MM': { residentId: hospitalId } } — kadro duzeltmeleri
   leads: {},               // { 'YYYY-MM': { hospitalId: residentId } } — asistan sorumlulari
-  reducedMotion: false
+  kadroConfirmed: false   // kadro dağılımı kullanıcı tarafından doğrulandı mı?
 };
 
 function read() {

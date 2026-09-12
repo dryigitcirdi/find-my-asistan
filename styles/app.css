@@ -255,7 +255,8 @@ body {
 .hc-meta strong { color: var(--text); font-weight: 600; }
 .hc-week { position: relative; display: flex; gap: 5px; align-items: flex-end; height: 30px; }
 .hc-week i {
-  flex: 1; border-radius: 3px; background: rgba(255,255,255,.12);
+  flex: 1; border-radius: 3px;
+  background: hsl(calc(var(--hh) * 1deg) 45% 62% / .26);
   transition: transform .5s var(--ease);
 }
 .hc-week i[data-h="3"] { height: 100%; }
@@ -614,3 +615,103 @@ body {
 }
 .btn-ghost:active { transform: scale(.98); }
 .btn-ghost:hover { color: var(--text); }
+
+/* ============================================================
+   Yatay kaydırmalı hastane sayfaları
+   ============================================================ */
+.day-screen { display: none; }
+.day-screen[data-active] {
+  display: flex; flex-direction: column;
+  position: fixed; inset: 0; z-index: 1;
+  animation: screen-in .55s var(--ease) both;
+}
+
+.pager-head {
+  flex: none;
+  display: flex; align-items: center; gap: 12px;
+  padding: max(env(safe-area-inset-top), 12px) var(--pad) 0;
+  max-width: var(--maxw); width: 100%; margin: 0 auto;
+}
+.pager-id { flex: 1; min-width: 0; text-align: center; }
+.pager-id .eyebrow { font-size: 9.5px; }
+.pager-id h1 {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  font-size: 21px; font-weight: 640; letter-spacing: -.028em;
+  margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pager-id h1[data-swap] { animation: name-swap .42s var(--ease) both; }
+@keyframes name-swap {
+  from { opacity: 0; transform: translate3d(0, 7px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+.dots {
+  flex: none;
+  display: flex; justify-content: center; gap: 7px;
+  padding: 13px 0 11px;
+}
+.dots button {
+  width: 6px; height: 6px; padding: 0; border: 0; border-radius: 99px;
+  background: rgba(255,255,255,.24); cursor: pointer;
+  transition: width .42s var(--spring), background .35s var(--ease);
+}
+.dots button[data-on] { width: 20px; background: hsl(calc(var(--h1) * 1deg) 88% 74%); }
+
+.pager {
+  flex: 1; min-height: 0;
+  display: flex;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.pager::-webkit-scrollbar { display: none; }
+
+.page {
+  flex: 0 0 100%;
+  scroll-snap-align: center; scroll-snap-stop: always;
+  overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+.page-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: 4px var(--pad) calc(env(safe-area-inset-bottom) + 44px);
+}
+.page-inner > .section-title:first-of-type { margin-top: 26px; }
+
+/* Sayfa kenarına yaklaşınca komşu hastanenin ipucu */
+.swipe-hint {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-top: 30px; font-size: 11.5px; color: var(--text-3);
+}
+.swipe-hint b { font-weight: 600; color: var(--text-2); }
+
+/* ---------- Yarın şeridi ---------- */
+.tomorrow {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 11px; padding-top: 10px;
+  border-top: 1px dashed var(--hairline);
+  font-size: 12px; color: var(--text-3);
+}
+.tomorrow .chip { font-size: 11px; padding: 3px 8px; }
+.tomorrow-arrow { flex: none; opacity: .5; }
+
+/* ---------- Kadro doğrulama uyarısı ---------- */
+.banner {
+  display: flex; align-items: center; gap: 11px;
+  margin-top: 16px; padding: 13px 15px;
+  border-radius: var(--r-md);
+  background: hsl(44 90% 58% / .1);
+  border: 1px solid hsl(44 90% 60% / .26);
+}
+.banner p { margin: 0; font-size: 12.5px; color: hsl(44 80% 84%); flex: 1; }
+.banner button {
+  flex: none; font: inherit; font-size: 12px; font-weight: 600;
+  color: hsl(44 92% 82%); background: hsl(44 90% 60% / .16);
+  border: 1px solid hsl(44 90% 62% / .3); border-radius: 9px;
+  padding: 6px 11px; cursor: pointer;
+  transition: transform .3s var(--spring);
+}
+.banner button:active { transform: scale(.94); }
