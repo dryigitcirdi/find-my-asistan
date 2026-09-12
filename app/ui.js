@@ -38,11 +38,13 @@ export function renderHospitals(db, today, opts, onPick) {
       return `<i data-h="${lvl}"${hd.onDuty.length ? ' data-duty' : ''}${day === today ? ' data-today' : ''}></i>`;
     }).join('');
 
-    const meta = d.expected === 0 && !d.onDuty.length
-      ? 'Bu ay kadro tanımlanmamış'
-      : `<strong>${d.present}</strong> asistan sahada` +
+    // Hafta sonu "beklenen mevcut" nöbetçi sayısıdır; kadronun kendisi ayrı.
+    let meta;
+    if (!d.kadro.length && !d.onDuty.length) meta = 'Bu ay kadro tanımlanmamış';
+    else if (d.restDay && !d.onDuty.length) meta = `Hafta sonu · ${d.kadro.length} kişilik kadro`;
+    else meta = `<strong>${d.present}</strong> asistan sahada` +
         (d.onDuty.length ? ` · <strong>${d.onDuty.length}</strong> nöbetçi` : '') +
-        (d.expected ? ` · ${d.expected} kişilik kadro` : '');
+        (d.kadro.length ? ` · ${d.kadro.length} kişilik kadro` : '');
 
     return `
       <button class="hospital-card" data-id="${h.id}" style="--hh:${h.hue}">
