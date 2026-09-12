@@ -7,6 +7,13 @@ Acıbadem Üniversitesi Ortopedi ve Travmatoloji — 4 hastane, 6 asistan.
 **Her oturumun başında `PROGRESS.md` dosyasını oku**, hangi fazda kalındığını oradan öğren ve
 iş bitirdikçe oradaki kutucukları güncelle.
 
+## İkon ve marka
+Konum işareti: eş merkezli halkalar + ortada fildişi bir kemik (ortopedi göndermesi),
+arkasında kehribar hale. `node tools/make-icons.js` 180/192/512 PNG üretir — bağımlılık yok,
+geometri dosyanın başındaki `bone` nesnesinden ayarlanır.
+Uygulama içindeki küçük işaret `index.html`'de satır içi SVG; küçük boyda okunurluk için
+sadeleştirilmiş (tek halka + daha büyük kemik). İkonun iki hali kasıtlı olarak farklı.
+
 ## Kurallar
 - **Derleme adımı yok.** Saf HTML + CSS + ES modülleri. Framework, bundler, npm bağımlılığı ekleme.
 - Animasyonlar yalnızca `transform` ve `opacity` üzerinden — 60fps korunmalı.

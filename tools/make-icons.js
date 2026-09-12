@@ -38,7 +38,24 @@ function draw(S) {
     [S * 0.335, S * 0.026, 0.26],
     [S * 0.225, S * 0.032, 0.58],
   ];
-  const dotR = S * 0.088;
+
+  // Ortadaki kemik — geometri (döndürülmemiş, merkez orijinde)
+  const bone = {
+    halfSpan: S * 0.143,   // lobe merkezlerinin yatay uzaklığı + lobe yarıçapı
+    lobeR:    S * 0.057,   // lobe (topuz) yarıçapı
+    shaftH:   S * 0.037,   // gövde yarı kalınlığı
+    lobeDy:   S * 0.033,   // lobe merkezlerinin dikey ayrımı
+    tilt:     -26 * Math.PI / 180
+  };
+  bone.lobeDx = bone.halfSpan - bone.lobeR;
+  const cosT = Math.cos(bone.tilt), sinT = Math.sin(bone.tilt);
+  const ivory = [255, 242, 223];
+
+  // noktadan doğru parçasına uzaklık (gövde için)
+  const segDist = (px, py, ax) => {
+    const t = Math.max(-ax, Math.min(ax, px));
+    return Math.hypot(px - t, py);
+  };
 
   for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
     let col = [5, 6, 10];
@@ -57,13 +74,20 @@ function draw(S) {
       if (cover > 0) col = mix(col, platinum, cover * op);
     }
 
-    // merkez noktanın halesi
-    const halo = clamp01(1 - d / (dotR * 3.1));
-    if (halo > 0) col = mix(col, amber, Math.pow(halo, 2.6) * 0.5);
+    // kemiğin arkasındaki kehribar hale
+    const halo = clamp01(1 - d / (bone.halfSpan * 2.0));
+    if (halo > 0) col = mix(col, amber, Math.pow(halo, 1.9) * 0.66);
 
-    // merkez nokta
-    const dot = clamp01(dotR + 0.5 - d);
-    if (dot > 0) col = mix(col, amber, dot);
+    // kemik: gövde + dört topuz birleşimi (işaretli uzaklık ile yumuşak kenar)
+    const lx = (x - cx + 0.5) * cosT + (y - cy + 0.5) * sinT;
+    const ly = -(x - cx + 0.5) * sinT + (y - cy + 0.5) * cosT;
+    let sd = segDist(lx, ly, bone.lobeDx) - bone.shaftH;
+    for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
+      const dl = Math.hypot(lx - sx * bone.lobeDx, ly - sy * bone.lobeDy) - bone.lobeR;
+      if (dl < sd) sd = dl;
+    }
+    const boneCover = clamp01(0.5 - sd);
+    if (boneCover > 0) col = mix(col, ivory, boneCover);
 
     const o = (y * S + x) * 4;
     buf[o] = Math.round(col[0]); buf[o+1] = Math.round(col[1]); buf[o+2] = Math.round(col[2]); buf[o+3] = 255;

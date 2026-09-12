@@ -1,5 +1,5 @@
 // Çevrimdışı çalışma. Kabuk dosyaları önbellekten, veri dosyası önce ağdan.
-const VERSION = 'asistan-panel-v7';
+const VERSION = 'asistan-panel-v9';
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
   './styles/app.css',

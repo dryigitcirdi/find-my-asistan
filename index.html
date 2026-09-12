@@ -31,10 +31,15 @@
   <section class="screen" data-screen="hospitals" data-active>
     <header>
       <div class="wordmark">
-        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
-          <circle cx="12" cy="12" r="9.1" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".28"/>
-          <circle cx="12" cy="12" r="5.7" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".62"/>
-          <circle cx="12" cy="12" r="2.5" fill="hsl(32 94% 60%)"/>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <!-- Küçük boyda sadeleşmiş işaret: tek halka + kemik -->
+          <circle cx="12" cy="12" r="10.4" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".3"/>
+          <circle cx="12" cy="12" r="7.4" fill="hsl(32 94% 58%)" opacity=".18"/>
+          <g transform="rotate(-26 12 12)" fill="#fff2df">
+            <rect x="8.3" y="10.4" width="7.4" height="3.2" rx="1.6"/>
+            <circle cx="8.3" cy="10.55" r="2.5"/><circle cx="8.3" cy="13.45" r="2.5"/>
+            <circle cx="15.7" cy="10.55" r="2.5"/><circle cx="15.7" cy="13.45" r="2.5"/>
+          </g>
         </svg>
         <span>Find My <b>Asistan</b></span>
       </div>
