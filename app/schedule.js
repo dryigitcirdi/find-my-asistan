@@ -182,3 +182,19 @@ export function monthSummary(db, residentId, month, opts = {}) {
     }, {})
   };
 }
+
+/**
+ * Bir asistanin haftalik ozeti — "hangi gun yok, hangi gun erken cikiyor".
+ * Hafta sonlari sayilmaz: zaten rutin mesai yok.
+ */
+export function weekOutlook(db, residentId, date, opts = {}) {
+  const days = weekOf(date);
+  const yok = [], erken = [];
+  for (const d of days) {
+    if (isWeekend(d) && !opts.weekendShift) continue;
+    const x = residentDay(db, residentId, d, opts);
+    if (!x.status.present) yok.push({ d, label: GUN_KISA[parseIso(d).getDay()], why: x.status.label });
+    else if (x.status.id === 'nobetci') erken.push({ d, label: GUN_KISA[parseIso(d).getDay()], at: x.leaveTime });
+  }
+  return { days, yok, erken, tam: yok.length === 0 && erken.length === 0 };
+}

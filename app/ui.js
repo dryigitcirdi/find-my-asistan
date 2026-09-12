@@ -188,6 +188,24 @@ function tomorrowHTML(db, residentId, date, opts, hospitalId) {
   </div>`;
 }
 
+/** "Bu hafta: Çar yok · Sal ve Cum 16:00'da çıkar" */
+function outlookHTML(db, residentId, date, opts) {
+  const w = S.weekOutlook(db, residentId, date, opts);
+  const liste = (arr) => arr.length === 1 ? arr[0].label
+    : arr.slice(0, -1).map((x) => x.label).join(', ') + ' ve ' + arr[arr.length - 1].label;
+  const mesaiGunu = w.days.filter((d) => !S.isWeekend(d)).length;
+  const bits = [];
+  if (w.yok.length >= mesaiGunu) {
+    // Tüm hafta yoksa günleri tek tek saymak yerine sebebini yaz
+    const sebep = [...new Set(w.yok.map((x) => x.why))];
+    bits.push(`<b>hiç yok</b>${sebep.length === 1 ? ' · ' + sebep[0].toLocaleLowerCase('tr') : ''}`);
+  } else if (w.yok.length) {
+    bits.push(`<b>${liste(w.yok)}</b> yok`);
+  }
+  if (w.erken.length) bits.push(`<b>${liste(w.erken)}</b> ${w.erken[0].at}’da çıkar`);
+  return `<p class="outlook">Bu hafta ${bits.length ? bits.join(' · ') : '<b>tam gün</b> burada'}</p>`;
+}
+
 function personHTML(db, p, hospitalId, wd, np, date, opts, leadId) {
   const r = db.residents.find((x) => x.id === p.residentId);
   const t = leaveLabel(p);
@@ -209,6 +227,7 @@ function personHTML(db, p, hospitalId, wd, np, date, opts, leadId) {
       </div>
       <div class="p-rail">${rail(wd, { ...p, hue: r.hue }, p.status.present, np)}</div>
       ${tomorrowHTML(db, r.id, date, opts, hospitalId)}
+      ${outlookHTML(db, r.id, date, opts)}
     </button>`;
 }
 
