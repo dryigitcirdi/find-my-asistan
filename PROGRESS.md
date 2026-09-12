@@ -19,9 +19,12 @@
 - [ ] **Yayın** — GitHub Pages + noindex, tam isimlerle. Depo adı `find-my-asistan`.
       `DEPLOY.md` içindeki 3 adım (depo oluştur → dağıtım anahtarını ekle → Pages'i aç)
       kullanıcıda. Sonrasında: `git -C . push -u origin main`
-- [ ] **Kalan 5 asistanın kadrosu** — Metehan (Ataşehir) doğrulandı, diğerleri hâlâ tahmin.
-      Kullanıcıya soruldu, cevap gelmedi. Ayarlar'daki düzeltme localStorage'da kaldığı
-      ve panel 18 kişiyle paylaşılacağı için doğru değer `data/schedule.json` içine yazılmalı.
+- [ ] **Kadro tablosu bekleniyor** — kullanıcı, asistanların primer çalıştıkları lokasyonu
+      gösteren bir Excel paylaşacak. Geldiğinde `data/schedule.json` içindeki
+      `assignments["YYYY-MM"]` haritası oradan yazılacak (şu an Metehan/Ataşehir dışındakiler
+      tahmin). Tablo aylık dağılım içeriyorsa her ay için ayrı anahtar açılmalı.
+      Ayarlar'daki düzeltme localStorage'da kaldığı ve panel 18 kişiyle paylaşılacağı için
+      doğru değerin veri dosyasında olması şart.
 - [ ] Ekim 2026 nöbet listesi çıkınca `data/schedule.json` güncellemesi
 - [ ] İsteğe bağlı: Drive'dan otomatik senkron (şu an elle aktarım)
 
@@ -64,6 +67,10 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Asistan sorumlusu alanı "isteğe bağlı" olarak geri plana alındı.
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
+
+## İkon kararı (12.09.2026)
+Yüklü sürüm: **halka + ponçik kemik** (`--variant=rings`). Kemiğin yanına matkap/tornavida
+eklemek denendi, vazgeçildi — gerekçe `CLAUDE.md` içinde.
 
 ## Kararlar
 - **16:00 kuralı** (kullanıcı onayladı 12.09.2026): nöbetçi asistan gündüz mesaisinden
