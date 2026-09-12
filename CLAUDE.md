@@ -45,6 +45,31 @@ app/main.js           yönlendirme + olaylar
 data/schedule.json    Drive'dan aktarılan nöbet/izin/rotasyon verisi
 ```
 
+## Gündüz kadrosu nereden geliyor
+Kadro, `Asistan Rotasyon Takvimi` sayfasında **yazıyla değil hücre dolgu rengiyle** tutuluyor.
+Renk anahtarı sayfanın kendi içinde, 20-23. satırlarda:
+yeşil `00FF00` Altunizade · teal `00FFFF` Atakent · sarı `FFFF00` Ataşehir · magenta `FF00FF` Maslak ·
+kırmızı `FF0000` dış rotasyon · turuncu `FF9900` tez dönemi.
+
+Sütun–ay hizası: **BJ(62) = 2026-01**, her yıl 12 sütun (B(2) = 2021-01).
+Satır 10'daki yıl etiketleri birleştirme yüzünden bir sütun kaymış görünür — onlara güvenme,
+satır 11'deki ay numaralarını ve bu hizayı kullan.
+
+Sayfa güncellenince yeniden içe aktarma:
+```bash
+# Drive → Asistan Rotasyon Takvimi → Dosya → İndir → .xlsx
+node tools/import-rotation.js ~/Downloads/Asistan\ Rotasyon\ Takvimi.xlsx
+```
+Araç, çıkardığı sayıları sayfanın kendi özet sütunlarıyla (ATZ/ATK/ATA/MAS/ROT/TEZ)
+karşılaştırıp farkları bildirir. M. Oğuz ve Can Eser'de birkaç hücrelik bilinen fark var;
+toplamlar tuttuğu için bunlar özet hücrelerindeki elle yazım kayması sayıldı.
+
+### xlsx okurken iki tuzak
+1. `<c .../>` biçiminde kendini kapatan hücreler ayrı ele alınmalı. Tek regex'le okunursa
+   **boş-ama-renkli** hücre kendinden sonrakini yutuyor — kadro hücreleri tam da bunlar.
+   Bu hata yüzünden bir tur renkler "seyrek" görünüp yanlış sonuca götürdü.
+2. Birleştirilmiş hücrelerde değer ve renk yalnızca sol üst hücrede durur; TEZ blokları böyle.
+
 ## Çalışma düzeni (varsayılan, Ayarlar'dan değiştirilebilir)
 - Mesai 08:00–18:00
 - Nöbetçi asistan gündüz mesaisinden **16:00**'da çıkar, akşam nöbete kalır

@@ -54,7 +54,7 @@ function goDay(hospitalId, keepScroll = false) {
     onPerson: (rid) => Sheet.openResident(db(), rid, today(), opts()),
     onSettings: openSettings,
     onGoto: (i) => scrollToPage(i, true)
-  }, { kadroUnconfirmed: !settings().kadroConfirmed });
+  });
 
   onDayScreen = true;
   UI.showScreen('day');

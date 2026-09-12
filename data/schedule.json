@@ -13,7 +13,8 @@
       "start": "08:00",
       "end": "18:00",
       "dutyLeave": "16:00"
-    }
+    },
+    "kadroSource": "Rotasyon takvimi renk kodları (yeşil Altunizade, teal Atakent, sarı Ataşehir, magenta Maslak, kırmızı dış rotasyon, turuncu tez)"
   },
   "hospitals": [
     {
@@ -710,6 +711,11 @@
     },
     {
       "r": "tky",
+      "month": "2026-08",
+      "name": "TEZ"
+    },
+    {
+      "r": "tky",
       "month": "2026-09",
       "name": "Acil"
     },
@@ -735,21 +741,6 @@
     },
     {
       "r": "mk",
-      "month": "2027-04",
-      "name": "FTR"
-    },
-    {
-      "r": "mk",
-      "month": "2027-07",
-      "name": "Anestezi"
-    },
-    {
-      "r": "mk",
-      "month": "2027-08",
-      "name": "Anestezi"
-    },
-    {
-      "r": "mk",
       "month": "2027-10",
       "name": "TEZ"
     },
@@ -772,26 +763,6 @@
       "r": "ma",
       "month": "2025-12",
       "name": "Acil"
-    },
-    {
-      "r": "ma",
-      "month": "2026-10",
-      "name": "Anestezi"
-    },
-    {
-      "r": "ma",
-      "month": "2026-11",
-      "name": "Anestezi"
-    },
-    {
-      "r": "ma",
-      "month": "2027-01",
-      "name": "GC"
-    },
-    {
-      "r": "ma",
-      "month": "2027-03",
-      "name": "FTR"
     },
     {
       "r": "ma",
@@ -835,11 +806,6 @@
     },
     {
       "r": "moc",
-      "month": "2026-11",
-      "name": "FTR"
-    },
-    {
-      "r": "moc",
       "month": "2027-03",
       "name": "Plastik"
     },
@@ -852,11 +818,6 @@
       "r": "moc",
       "month": "2027-05",
       "name": "KVC"
-    },
-    {
-      "r": "moc",
-      "month": "2027-06",
-      "name": "GC"
     },
     {
       "r": "moc",
@@ -885,11 +846,6 @@
     },
     {
       "r": "ty",
-      "month": "2026-12",
-      "name": "GC"
-    },
-    {
-      "r": "ty",
       "month": "2027-01",
       "name": "Plastik"
     },
@@ -897,26 +853,6 @@
       "r": "ty",
       "month": "2027-02",
       "name": "Plastik"
-    },
-    {
-      "r": "ty",
-      "month": "2027-08",
-      "name": "Anestezi"
-    },
-    {
-      "r": "ty",
-      "month": "2027-09",
-      "name": "Anestezi"
-    },
-    {
-      "r": "ty",
-      "month": "2027-11",
-      "name": "Acil"
-    },
-    {
-      "r": "ty",
-      "month": "2027-12",
-      "name": "Acil"
     },
     {
       "r": "ty",
@@ -937,35 +873,556 @@
       "r": "ty",
       "month": "2030-07",
       "name": "TEZ"
+    },
+    {
+      "r": "ce",
+      "month": "2028-03",
+      "name": "Plastik"
+    },
+    {
+      "r": "ce",
+      "month": "2028-04",
+      "name": "Plastik"
+    },
+    {
+      "r": "ce",
+      "month": "2028-11",
+      "name": "KVC"
+    },
+    {
+      "r": "ce",
+      "month": "2030-05",
+      "name": "TEZ"
+    },
+    {
+      "r": "ce",
+      "month": "2030-06",
+      "name": "TEZ"
+    },
+    {
+      "r": "ce",
+      "month": "2030-07",
+      "name": "TEZ"
     }
   ],
   "assignments": {
-    "2026-08": {
+    "2021-12": {
+      "tky": "atasehir"
+    },
+    "2022-01": {
+      "tky": "atasehir"
+    },
+    "2022-02": {
+      "tky": "altunizade"
+    },
+    "2022-03": {
+      "tky": "altunizade"
+    },
+    "2022-04": {
+      "tky": "altunizade"
+    },
+    "2022-05": {
+      "tky": "altunizade"
+    },
+    "2022-06": {
+      "tky": "altunizade"
+    },
+    "2022-07": {
+      "tky": "altunizade"
+    },
+    "2022-08": {
+      "tky": "altunizade"
+    },
+    "2022-09": {
+      "tky": "altunizade"
+    },
+    "2022-10": {
+      "tky": "altunizade"
+    },
+    "2022-11": {
+      "tky": "maslak"
+    },
+    "2022-12": {
+      "tky": "maslak"
+    },
+    "2023-01": {
+      "tky": "maslak"
+    },
+    "2023-02": {
+      "tky": "maslak"
+    },
+    "2023-03": {
+      "tky": "maslak"
+    },
+    "2023-04": {
+      "tky": "maslak"
+    },
+    "2023-05": {
+      "tky": "atakent"
+    },
+    "2023-06": {
+      "tky": "atakent"
+    },
+    "2023-07": {
+      "tky": "atakent"
+    },
+    "2023-08": {
+      "tky": "atakent"
+    },
+    "2023-09": {
+      "tky": "atakent",
+      "mk": "atasehir"
+    },
+    "2023-10": {
+      "tky": "atakent",
+      "mk": "atasehir"
+    },
+    "2023-11": {
+      "tky": "atakent",
+      "mk": "atasehir"
+    },
+    "2023-12": {
+      "tky": "atakent",
+      "mk": "atasehir"
+    },
+    "2024-01": {
       "tky": "altunizade",
+      "mk": "atasehir"
+    },
+    "2024-02": {
+      "tky": "altunizade",
+      "mk": "atasehir"
+    },
+    "2024-03": {
+      "tky": "altunizade",
+      "mk": "atasehir"
+    },
+    "2024-04": {
+      "tky": "altunizade",
+      "mk": "atasehir"
+    },
+    "2024-05": {
+      "tky": "atakent",
+      "mk": "atasehir"
+    },
+    "2024-06": {
+      "tky": "atakent",
+      "mk": "atasehir"
+    },
+    "2024-07": {
+      "tky": "atakent",
       "mk": "altunizade",
+      "ma": "atasehir"
+    },
+    "2024-08": {
+      "tky": "atakent",
+      "mk": "altunizade",
+      "ma": "atasehir"
+    },
+    "2024-09": {
+      "tky": "atakent",
+      "mk": "altunizade",
+      "ma": "atasehir"
+    },
+    "2024-10": {
+      "tky": "atakent",
+      "mk": "altunizade",
+      "ma": "atasehir"
+    },
+    "2024-12": {
+      "tky": "maslak",
+      "mk": "altunizade",
+      "ma": "atasehir",
+      "moc": "atasehir"
+    },
+    "2025-01": {
+      "tky": "maslak",
+      "mk": "atakent",
+      "ma": "altunizade",
+      "moc": "atasehir"
+    },
+    "2025-02": {
+      "tky": "maslak",
+      "mk": "atakent",
+      "ma": "altunizade",
+      "moc": "atasehir"
+    },
+    "2025-03": {
+      "tky": "maslak",
+      "mk": "atakent",
+      "ma": "altunizade",
+      "moc": "atasehir"
+    },
+    "2025-04": {
+      "tky": "maslak",
+      "mk": "atakent",
+      "ma": "altunizade",
+      "moc": "atasehir"
+    },
+    "2025-05": {
+      "tky": "maslak",
+      "mk": "atakent",
+      "ma": "altunizade",
+      "moc": "atasehir"
+    },
+    "2025-06": {
+      "tky": "atasehir",
+      "mk": "atakent",
+      "ma": "altunizade",
+      "moc": "atasehir"
+    },
+    "2025-09": {
+      "tky": "atasehir",
+      "mk": "maslak",
+      "ma": "atakent",
+      "moc": "atakent",
+      "ty": "atasehir",
+      "ce": "maslak"
+    },
+    "2025-10": {
+      "tky": "atasehir",
+      "mk": "maslak",
+      "ma": "atakent",
+      "moc": "atakent",
+      "ty": "atasehir",
+      "ce": "maslak"
+    },
+    "2025-11": {
+      "tky": "atasehir",
+      "mk": "maslak",
+      "ty": "maslak",
+      "ce": "maslak"
+    },
+    "2025-12": {
+      "tky": "atasehir",
+      "mk": "maslak",
+      "ty": "maslak",
+      "ce": "maslak"
+    },
+    "2026-02": {
+      "tky": "altunizade",
+      "mk": "atasehir",
+      "ma": "maslak",
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atasehir"
+    },
+    "2026-03": {
+      "tky": "altunizade",
+      "mk": "atasehir",
+      "ma": "maslak",
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atasehir"
+    },
+    "2026-04": {
+      "tky": "altunizade",
+      "mk": "atasehir",
+      "ma": "maslak",
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atasehir"
+    },
+    "2026-05": {
+      "tky": "atasehir",
+      "mk": "atasehir",
+      "ma": "maslak",
+      "moc": "atakent",
+      "ty": "maslak",
+      "ce": "atasehir"
+    },
+    "2024-11": {
+      "mk": "altunizade",
+      "ma": "atasehir"
+    },
+    "2025-07": {
+      "mk": "maslak",
+      "ma": "atakent",
+      "moc": "atakent"
+    },
+    "2025-08": {
+      "mk": "maslak",
+      "ma": "atakent",
+      "moc": "atakent",
+      "ty": "atasehir",
+      "ce": "maslak"
+    },
+    "2026-01": {
+      "mk": "atasehir",
+      "ma": "maslak",
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "maslak"
+    },
+    "2026-06": {
+      "mk": "atasehir",
+      "ma": "maslak",
+      "moc": "atakent",
+      "ty": "maslak",
+      "ce": "atasehir"
+    },
+    "2026-07": {
+      "mk": "altunizade",
+      "ma": "atasehir",
+      "moc": "atakent",
+      "ty": "maslak",
+      "ce": "atasehir"
+    },
+    "2026-08": {
+      "mk": "altunizade",
+      "ma": "atasehir",
+      "moc": "maslak",
+      "ty": "maslak",
+      "ce": "atakent"
+    },
+    "2026-09": {
+      "mk": "altunizade",
+      "ma": "atasehir",
+      "moc": "maslak",
+      "ty": "altunizade",
+      "ce": "atakent"
+    },
+    "2026-10": {
+      "mk": "altunizade",
+      "ma": "atasehir",
+      "moc": "maslak",
+      "ty": "altunizade",
+      "ce": "atakent"
+    },
+    "2027-01": {
+      "mk": "maslak",
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ce": "maslak"
+    },
+    "2027-02": {
+      "mk": "maslak",
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ce": "maslak"
+    },
+    "2027-03": {
+      "mk": "atakent",
+      "ma": "maslak",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2027-04": {
+      "mk": "atakent",
+      "ma": "maslak",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2027-05": {
+      "mk": "atakent",
+      "ma": "maslak",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2027-06": {
+      "mk": "atakent",
+      "ma": "maslak",
+      "moc": "maslak",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2027-07": {
+      "mk": "maslak",
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2027-08": {
+      "mk": "maslak",
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2027-09": {
+      "mk": "maslak",
+      "ma": "altunizade",
+      "moc": "maslak",
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2026-11": {
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2026-12": {
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2027-10": {
+      "ma": "altunizade",
+      "moc": "maslak",
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2027-11": {
       "ma": "atasehir",
       "moc": "altunizade",
       "ty": "maslak",
       "ce": "atakent"
     },
-    "2026-09": {
-      "tky": "altunizade",
-      "mk": "altunizade",
+    "2027-12": {
       "ma": "atasehir",
       "moc": "altunizade",
       "ty": "maslak",
       "ce": "atakent"
+    },
+    "2028-02": {
+      "ma": "atasehir",
+      "moc": "altunizade",
+      "ce": "atakent"
+    },
+    "2028-03": {
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ty": "altunizade"
+    },
+    "2028-04": {
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ty": "altunizade"
+    },
+    "2028-05": {
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2028-06": {
+      "ma": "atakent",
+      "moc": "atasehir",
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2028-07": {
+      "ma": "maslak",
+      "moc": "atakent",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2028-08": {
+      "ma": "maslak",
+      "moc": "atakent",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2028-09": {
+      "ma": "maslak",
+      "moc": "atakent",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2028-10": {
+      "ma": "maslak",
+      "moc": "atakent",
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2028-11": {
+      "ma": "altunizade",
+      "moc": "maslak",
+      "ty": "atakent"
+    },
+    "2028-12": {
+      "ma": "altunizade",
+      "moc": "maslak",
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2029-01": {
+      "ma": "altunizade",
+      "moc": "maslak",
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2029-02": {
+      "ma": "altunizade",
+      "moc": "maslak",
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2029-03": {
+      "ma": "atasehir",
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atakent"
+    },
+    "2028-01": {
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atakent"
+    },
+    "2029-04": {
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atakent"
+    },
+    "2029-05": {
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atakent"
+    },
+    "2029-06": {
+      "moc": "altunizade",
+      "ty": "maslak",
+      "ce": "atakent"
+    },
+    "2029-07": {
+      "moc": "atasehir",
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2029-08": {
+      "moc": "atasehir",
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2029-09": {
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2029-10": {
+      "ty": "altunizade",
+      "ce": "maslak"
+    },
+    "2029-11": {
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2029-12": {
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2030-01": {
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2030-02": {
+      "ty": "atasehir",
+      "ce": "altunizade"
+    },
+    "2030-03": {
+      "ty": "atakent",
+      "ce": "atasehir"
+    },
+    "2030-04": {
+      "ty": "atakent",
+      "ce": "atasehir"
     }
   },
-  "leads": {
-    "2026-08": {},
-    "2026-09": {}
-  },
+  "leads": {},
   "dataNotes": [
-    "Ataşehir’de nöbet tutulmuyor; Ataşehir asistanı nöbetlerini diğer hastanelerde tutuyor.",
+    "Gündüz kadrosu, rotasyon takvimindeki renk kodlarından aya göre okunuyor; kadro her ay değişebilir.",
+    "Ataşehir’de nöbet tutulmuyor; Ataşehir kadrosundaki asistan nöbetlerini diğer hastanelerde tutuyor.",
     "TKY · 13/06/2026 kaydı Eylül sayfasında yer aldığı için 13/09/2026 olarak alındı.",
     "TY · 5/082/2026 kaydı 05/08/2026 olarak alındı.",
     "MOÇ · Ağustos sayfasındaki satırlar Eylül tarihleriyle doldurulmuş; Ağustos nöbeti işlenmedi.",
-    "Kadro dağılımı kaynak tablolarda yok; nöbet yeri kadroyu göstermiyor. Ayarlar’dan düzelt."
+    "Rotasyon takvimindeki özet sütunları (ATZ/ATK/MAS) M. Oğuz ve Can Eser için renklerle birkaç hücre farklı; toplamlar tutuyor, Eylül etkilenmiyor."
   ]
 }

@@ -19,12 +19,10 @@
 - [ ] **Yayın** — GitHub Pages + noindex, tam isimlerle. Depo adı `find-my-asistan`.
       `DEPLOY.md` içindeki 3 adım (depo oluştur → dağıtım anahtarını ekle → Pages'i aç)
       kullanıcıda. Sonrasında: `git -C . push -u origin main`
-- [ ] **Kadro tablosu bekleniyor** — kullanıcı, asistanların primer çalıştıkları lokasyonu
-      gösteren bir Excel paylaşacak. Geldiğinde `data/schedule.json` içindeki
-      `assignments["YYYY-MM"]` haritası oradan yazılacak (şu an Metehan/Ataşehir dışındakiler
-      tahmin). Tablo aylık dağılım içeriyorsa her ay için ayrı anahtar açılmalı.
-      Ayarlar'daki düzeltme localStorage'da kaldığı ve panel 18 kişiyle paylaşılacağı için
-      doğru değerin veri dosyasında olması şart.
+- [x] ~~Kadro tablosu bekleniyor~~ — **çözüldü**: kadro rotasyon takviminin renk kodlarından
+      okunuyor, 101 ay için tanımlı (2021-12 → 2030-04). `tools/import-rotation.js` ile
+      yeniden üretilebilir. Detay ve tuzaklar `CLAUDE.md` içinde.
+
 - [ ] Ekim 2026 nöbet listesi çıkınca `data/schedule.json` güncellemesi
 - [ ] İsteğe bağlı: Drive'dan otomatik senkron (şu an elle aktarım)
 
@@ -67,6 +65,14 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Asistan sorumlusu alanı "isteğe bağlı" olarak geri plana alındı.
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
+
+## v4 — kadro renk kodlarından okunuyor (12.09.2026)
+Rotasyon takviminde gündüz kadrosu hücre dolgu rengiyle tutuluyormuş. Artık 101 ay için
+kadro veride: Eylül 2026 → Müge Altunizade, Metehan Ataşehir, M. Oğuz Maslak,
+Tarık Altunizade, Can Atakent, T. Koray Acil rotasyonunda. Kasım'da kadro kendiliğinden
+değişiyor. Önceki tahminlerimden ikisi (M. Oğuz, Tarık) yanlışmış.
+"Kadro tahmin edildi" uyarısı kaldırıldı; yerine "Bu ay klinik dışında" satırı geldi.
+Can Eser'in rotasyon satırı ilk aktarımda atlanmıştı, artık var.
 
 ## v3 — açılış ekranı ve mevcut sayımı düzeltmeleri (12.09.2026)
 - **Açılış ekranı:** uygulama her açılışta marka (kemik işareti + "Find My Asistan")

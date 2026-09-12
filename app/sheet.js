@@ -148,7 +148,7 @@ export function openSettings(db, date, onSaved) {
     </div>
 
     <div class="set">
-      <p class="eyebrow">Kadro — hangi asistan hangi hastanede</p>
+      <p class="eyebrow">Kadro <span style="text-transform:none;letter-spacing:0">— rotasyon takviminden okunuyor, gerekirse değiştir</span></p>
       ${db.residents.map((r) => `
         <div class="set-row">
           <label>${esc(r.name)}</label>
@@ -159,10 +159,6 @@ export function openSettings(db, date, onSaved) {
           </select>
         </div>`).join('')}
     </div>
-
-    <button class="btn-ghost" id="btn-confirm" style="margin:-2px 0 26px">
-      ${s.kadroConfirmed ? 'Kadro doğrulandı ✓' : 'Bu kadro listesi doğru — uyarıyı kaldır'}
-    </button>
 
     <div class="set">
       <p class="eyebrow">Asistan sorumluları <span style="text-transform:none;letter-spacing:0">(isteğe bağlı)</span></p>
@@ -201,12 +197,6 @@ export function openSettings(db, date, onSaved) {
   });
   sheet.querySelectorAll('[data-lead]').forEach((sel) => {
     sel.addEventListener('change', () => setLead(month, sel.dataset.lead, sel.value || null));
-  });
-
-  const confirmBtn = sheet.querySelector('#btn-confirm');
-  confirmBtn.addEventListener('click', () => {
-    update({ kadroConfirmed: true });
-    confirmBtn.textContent = 'Kadro doğrulandı ✓';
   });
 
   sheet.querySelector('#btn-reset').addEventListener('click', () => {

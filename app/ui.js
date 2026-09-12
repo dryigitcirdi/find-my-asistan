@@ -213,7 +213,7 @@ function personHTML(db, p, hospitalId, wd, np, date, opts, leadId) {
 }
 
 /** Tek bir hastanenin sayfası. HTML metni döner, DOM'a yazmaz. */
-export function panelHTML(db, hospitalId, date, opts, flags = {}) {
+export function panelHTML(db, hospitalId, date, opts) {
   const h = db.hospitals.find((x) => x.id === hospitalId);
   const d = S.hospitalDay(db, hospitalId, date, opts);
   const wd = db.meta.workday;
@@ -256,11 +256,20 @@ export function panelHTML(db, hospitalId, date, opts, flags = {}) {
       </div>
     </div>`;
 
-  const banner = flags.kadroUnconfirmed ? `
-    <div class="banner">
-      <p>Kadro dağılımı tahmin edildi — doğru değilse düzelt.</p>
-      <button data-open-settings>Düzenle</button>
-    </div>` : '';
+  // Bu ay hiçbir hastanenin kadrosunda olmayanlar (dış rotasyon / tez dönemi)
+  const assignedIds = new Set(Object.keys(db.assignments[month] || {}));
+  const outside = db.residents
+    .filter((r) => !assignedIds.has(r.id))
+    .map((r) => {
+      const rot = db.rotations.find((x) => x.r === r.id && x.month === month);
+      return rot ? { r, label: db.rotationNames[rot.name] || rot.name } : null;
+    })
+    .filter(Boolean);
+  const banner = outside.length ? `
+    <p class="outside">
+      <span class="eyebrow">Bu ay klinik dışında</span>
+      ${outside.map((o) => `<span><b style="color:hsl(${o.r.hue}deg 70% 78%)">${esc(o.r.short)}</b> · ${esc(o.label)}</span>`).join('<i class="dotsep"></i>')}
+    </p>` : '';
 
   const people = d.rows.length
     ? `<div class="people stagger">${d.rows.map((p) => personHTML(db, p, hospitalId, wd, np, date, opts, leadId)).join('')}</div>`
@@ -332,11 +341,11 @@ export function panelHTML(db, hospitalId, date, opts, flags = {}) {
 }
 
 /** Dört hastaneyi de yan yana kurar */
-export function renderPager(db, date, opts, handlers, flags = {}) {
+export function renderPager(db, date, opts, handlers) {
   const pager = $('#pager');
   const dots = $('#dots');
 
-  const panels = db.hospitals.map((h) => ({ h, ...panelHTML(db, h.id, date, opts, flags) }));
+  const panels = db.hospitals.map((h) => ({ h, ...panelHTML(db, h.id, date, opts) }));
   pager.innerHTML = panels.map((p, i) =>
     `<div class="page" data-id="${p.h.id}" data-i="${i}"><div class="page-inner">${p.html}</div></div>`).join('');
   dots.innerHTML = db.hospitals.map((h, i) =>
