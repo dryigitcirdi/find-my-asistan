@@ -2,12 +2,11 @@
 const KEY = 'asistan-panel/v1';
 
 const DEFAULTS = {
-  hospitalId: null,        // son secilen hastane
+  homeHospitalId: null,    // ana hastane — uygulama hep burada acilir, kaydirma bunu degistirmez
   weekendShift: false,     // hafta sonu rutin mesai var mi?
   workday: null,           // { start, end, dutyLeave } — null ise veri dosyasindaki kullanilir
   assignments: {},         // { 'YYYY-MM': { residentId: hospitalId } } — kadro duzeltmeleri
   leads: {},               // { 'YYYY-MM': { hospitalId: residentId } } — asistan sorumlulari
-  kadroConfirmed: false   // kadro dağılımı kullanıcı tarafından doğrulandı mı?
 };
 
 function read() {

@@ -136,6 +136,17 @@ export function openSettings(db, date, onSaved) {
     </div>
 
     <div class="set">
+      <p class="eyebrow">Ana hastane <span style="text-transform:none;letter-spacing:0">— uygulama hep burada açılır</span></p>
+      <div class="set-row">
+        <label>Ana hastanem</label>
+        <select data-home>
+          ${db.hospitals.map((h) =>
+            `<option value="${h.id}"${s.homeHospitalId === h.id ? ' selected' : ''}>${esc(h.name)}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+
+    <div class="set">
       <p class="eyebrow">Mesai düzeni</p>
       <div class="set-row"><label>Mesai başlangıcı</label>
         <input type="time" data-wd="start" value="${wd.start}"></div>
@@ -177,6 +188,9 @@ export function openSettings(db, date, onSaved) {
   `, onSaved);
 
   const sheet = root.querySelector('.sheet');
+
+  const homeSel = sheet.querySelector('[data-home]');
+  if (homeSel) homeSel.addEventListener('change', () => update({ homeHospitalId: homeSel.value }));
 
   sheet.querySelectorAll('[data-wd]').forEach((inp) => {
     inp.addEventListener('change', () => {

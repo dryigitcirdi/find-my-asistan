@@ -39,14 +39,15 @@ const pager = () => document.getElementById('pager');
 function goHospitals() {
   onDayScreen = false;
   stopTicking();
-  UI.renderHospitals(db(), today(), opts(), (id) => goDay(id));
+  // Izgaradan seçmek ana hastaneyi belirler; yana kaydırmak belirlemez.
+  UI.renderHospitals(db(), today(), opts(), (id) => { update({ homeHospitalId: id }); goDay(id); });
   UI.setTone('pick', null);
   UI.showScreen('hospitals');
 }
 
 /* ---------------- Yatay kaydırmalı hastane sayfaları ---------------- */
 
-function goDay(hospitalId, keepScroll = false) {
+function goDay(hospitalId) {
   const d = db();
   const index = Math.max(0, d.hospitals.findIndex((h) => h.id === hospitalId));
 
@@ -62,7 +63,7 @@ function goDay(hospitalId, keepScroll = false) {
   // Başlık/nokta/ton kaydırma konumuna bakmadan doğrudan ayarlanır.
   // (Yerleşim hazır değilken scrollLeft okunamıyor; buna güvenmek ekranı "—" bırakıyordu.)
   active = index;
-  UI.setActivePage(panels, index);
+  UI.setActivePage(panels, index, settings().homeHospitalId);
   settleScroll(index);
 
   bindPagerScroll();
@@ -104,13 +105,12 @@ function syncActive() {
   const i = Math.round(el.scrollLeft / el.clientWidth);
   if (i === active || !panels[i]) return;
   active = i;
-  UI.setActivePage(panels, i);
-  update({ hospitalId: panels[i].h.id });
+  UI.setActivePage(panels, i, settings().homeHospitalId);
 }
 
 function openSettings() {
   Sheet.openSettings(db(), today(), () => {
-    if (onDayScreen) goDay(panels[active] ? panels[active].h.id : settings().hospitalId);
+    if (onDayScreen) goDay(panels[active] ? panels[active].h.id : settings().homeHospitalId);
     else goHospitals();
   });
 }
@@ -150,9 +150,13 @@ function stopTicking() {
   }
 
   document.getElementById('btn-grid').addEventListener('click', goHospitals);
+  document.getElementById('make-home').addEventListener('click', (e) => {
+    update({ homeHospitalId: e.currentTarget.dataset.id });
+    UI.setActivePage(panels, active, e.currentTarget.dataset.id);
+  });
   document.getElementById('btn-settings').addEventListener('click', openSettings);
 
-  const last = params.get('h') || settings().hospitalId;
+  const last = params.get('h') || settings().homeHospitalId;
   if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
   dismissLaunch();
 
@@ -162,7 +166,7 @@ function stopTicking() {
     if (document.visibilityState !== 'visible') return;
     if (today() !== lastDate) {                 // gün değişmiş
       lastDate = today();
-      if (onDayScreen) goDay(panels[active] ? panels[active].h.id : settings().hospitalId);
+      if (onDayScreen) goDay(panels[active] ? panels[active].h.id : settings().homeHospitalId);
       else goHospitals();
     }
   });
