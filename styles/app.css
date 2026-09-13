@@ -169,7 +169,7 @@ body {
 }
 .display {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif;
-  font-size: clamp(30px, 8.4vw, 44px);
+  font-size: clamp(32px, 9vw, 46px);
   font-weight: 640;
   letter-spacing: -0.035em;
   line-height: 1.04;
@@ -222,6 +222,15 @@ body {
   will-change: transform;
 }
 .hospital-card:hover { border-color: var(--hairline-strong); }
+/* Ana hastane: listenin başında ve hafifçe öne çıkmış */
+.hospital-card[data-home] {
+  border-color: hsl(calc(var(--hh) * 1deg) 70% 62% / .38);
+  box-shadow: var(--shadow), var(--inset), 0 0 0 1px hsl(calc(var(--hh) * 1deg) 70% 62% / .14);
+}
+.hospital-card[data-home] .hc-code {
+  background: hsl(calc(var(--hh) * 1deg) 80% 60% / .26);
+  border-color: hsl(calc(var(--hh) * 1deg) 80% 66% / .44);
+}
 .hospital-card:active { transition-duration: .12s; }
 .hospital-card::before {         /* hastaneye özel ışıma */
   content: '';

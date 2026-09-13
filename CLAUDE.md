@@ -46,6 +46,11 @@ Nöbetin hangi hastanede olduğu barda **gösterilmez**: gözlemci için önemli
 "burada mı, kaçta çıkıyor". Nöbet yeri asistan kartının metninde yazıyor.
 Eskiden sarı çerçeve + gri iç kullanılıyordu; "o gün yok" izlenimi verdiği için kaldırıldı.
 
+## Hastane sırası
+`hospitalsOrdered()` (app/data.js) ana hastaneyi listenin başına alır. Hem seçim ekranı
+hem yatay kaydırma bunu kullanır — sıra ikisinde aynı olmalı, yoksa noktalar şaşırtıyor.
+Ana hastane kartında kısaltma yerine "ANA" yazar.
+
 ## Ayarlarda ne var, ne yok
 Değiştirilebilen tek şey **ana hastane**. Mesai saatleri, kadro, rotasyon ve asistan
 sorumluları kaldırıldı: hepsi Drive'dan okunuyor ve herkes aynı veriyi görmeli.

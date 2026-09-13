@@ -1,5 +1,5 @@
 // Uygulama yonlendirme + olay baglama
-import { load, db, opts } from './data.js';
+import { load, db, opts, hospitalsOrdered } from './data.js';
 import { settings, update } from './store.js';
 import * as S from './schedule.js';
 import * as UI from './ui.js';
@@ -40,7 +40,8 @@ function goHospitals() {
   onDayScreen = false;
   stopTicking();
   // Izgaradan seçmek ana hastaneyi belirler; yana kaydırmak belirlemez.
-  UI.renderHospitals(db(), today(), opts(), (id) => { update({ homeHospitalId: id }); goDay(id); });
+  UI.renderHospitals(db(), today(), opts(), (id) => { update({ homeHospitalId: id }); goDay(id); },
+                     hospitalsOrdered(), settings().homeHospitalId);
   UI.setTone('pick', null);
   UI.showScreen('hospitals');
 }
@@ -49,13 +50,14 @@ function goHospitals() {
 
 function goDay(hospitalId) {
   const d = db();
-  const index = Math.max(0, d.hospitals.findIndex((h) => h.id === hospitalId));
+  const sirali = hospitalsOrdered();
+  const index = Math.max(0, sirali.findIndex((h) => h.id === hospitalId));
 
   panels = UI.renderPager(d, today(), opts(), {
     onPerson: (rid) => Sheet.openResident(db(), rid, today(), opts()),
     onSettings: openSettings,
     onGoto: (i) => scrollToPage(i, true)
-  });
+  }, sirali);
 
   onDayScreen = true;
   UI.showScreen('day');

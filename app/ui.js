@@ -20,16 +20,15 @@ export function setTone(tone, hue) {
 
 /* ============================ Hastane seçimi ============================ */
 
-export function renderHospitals(db, today, opts, onPick) {
-  $('#org-line').textContent = db.meta.org;
-  $('#pick-date').textContent =
-    `${S.formatLongDate(today)} · ${S.GUN_UZUN[S.parseIso(today).getDay()]}`;
-  $('#pick-foot').innerHTML =
-    `Kaynak: ${esc(db.meta.source)}<br>Veri ${esc(db.meta.coverage.join(' – '))} dönemini kapsıyor.`;
+export function renderHospitals(db, today, opts, onPick, order, homeId) {
+  const liste = order || db.hospitals;
+  $('#pick-day').textContent = S.GUN_UZUN[S.parseIso(today).getDay()];
+  $('#pick-date').textContent = S.formatLongDate(today);
+  $('#pick-foot').textContent = db.meta.org;
 
   const week = S.weekOf(today);
   const grid = $('#hospital-grid');
-  grid.innerHTML = db.hospitals.map((h) => {
+  grid.innerHTML = liste.map((h) => {
     const d = S.hospitalDay(db, h.id, today, opts);
     const bars = week.map((day) => {
       const hd = S.hospitalDay(db, h.id, day, opts);
@@ -47,10 +46,10 @@ export function renderHospitals(db, today, opts, onPick) {
         (d.kadro.length ? ` · ${d.kadro.length} kişilik kadro` : '');
 
     return `
-      <button class="hospital-card" data-id="${h.id}" style="--hh:${h.hue}">
+      <button class="hospital-card" data-id="${h.id}" style="--hh:${h.hue}"${h.id === homeId ? ' data-home' : ''}>
         <div class="hc-top">
           <h2 class="hc-name">${esc(h.name)}</h2>
-          <span class="hc-code">${esc(h.short)}</span>
+          <span class="hc-code">${h.id === homeId ? 'ANA' : esc(h.short)}</span>
         </div>
         <p class="hc-meta">${meta}</p>
         <div class="hc-week" aria-hidden="true">${bars}</div>
@@ -236,7 +235,7 @@ function personHTML(db, p, hospitalId, wd, np, date, opts, leadId) {
 }
 
 /** Tek bir hastanenin sayfası. HTML metni döner, DOM'a yazmaz. */
-export function panelHTML(db, hospitalId, date, opts) {
+export function panelHTML(db, hospitalId, date, opts, order) {
   const h = db.hospitals.find((x) => x.id === hospitalId);
   const d = S.hospitalDay(db, hospitalId, date, opts);
   const wd = db.meta.workday;
@@ -308,8 +307,9 @@ export function panelHTML(db, hospitalId, date, opts) {
   const conflicts = d.rows.filter((p) => p.conflict)
     .map((p) => `${db.residents.find((x) => x.id === p.residentId).name} · ${S.formatLongDate(p.date)} hem nöbet hem nöbet ertesi izin.`);
 
-  const idx = db.hospitals.findIndex((x) => x.id === hospitalId);
-  const prev = db.hospitals[idx - 1], next = db.hospitals[idx + 1];
+  const liste = order || db.hospitals;
+  const idx = liste.findIndex((x) => x.id === hospitalId);
+  const prev = liste[idx - 1], next = liste[idx + 1];
   const hint = (prev || next) ? `<div class="swipe-hint">
       ${prev ? `<span>← <b>${esc(prev.name)}</b></span>` : '<span></span>'}
       ${prev && next ? '<span>·</span>' : ''}
@@ -391,14 +391,15 @@ function weekCardHTML(db, hospitalId, anchor, opts, label, today, showLegend) {
 }
 
 /** Dört hastaneyi de yan yana kurar */
-export function renderPager(db, date, opts, handlers) {
+export function renderPager(db, date, opts, handlers, order) {
+  const liste = order || db.hospitals;
   const pager = $('#pager');
   const dots = $('#dots');
 
-  const panels = db.hospitals.map((h) => ({ h, ...panelHTML(db, h.id, date, opts) }));
+  const panels = liste.map((h) => ({ h, ...panelHTML(db, h.id, date, opts, liste) }));
   pager.innerHTML = panels.map((p, i) =>
     `<div class="page" data-id="${p.h.id}" data-i="${i}"><div class="page-inner">${p.html}</div></div>`).join('');
-  dots.innerHTML = db.hospitals.map((h, i) =>
+  dots.innerHTML = liste.map((h, i) =>
     `<button data-i="${i}" role="tab" aria-label="${esc(h.name)}"></button>`).join('');
 
   $('#pager-date').textContent =
