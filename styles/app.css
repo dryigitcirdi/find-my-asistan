@@ -414,7 +414,7 @@ body {
 }
 .chip[data-s="nobetci"]     { background: hsl(32 92% 58% / .17); border-color: hsl(32 92% 62% / .34); color: hsl(36 96% 76%); }
 .chip[data-s="mesaide"]     { background: hsl(152 62% 48% / .15); border-color: hsl(152 62% 55% / .3);  color: hsl(152 70% 76%); }
-.chip[data-s="nobetErtesi"] { background: hsl(268 70% 62% / .16); border-color: hsl(268 70% 66% / .3);  color: hsl(268 84% 84%); }
+.chip[data-s="nobetErtesi"] { background: hsl(353 82% 58% / .2);  border-color: hsl(353 82% 62% / .42); color: hsl(353 92% 84%); }
 .chip[data-s="izinli"]      { background: hsl(200 60% 60% / .14); border-color: hsl(200 60% 66% / .26); color: hsl(200 70% 82%); }
 .chip[data-s="rotasyon"]    { background: rgba(255,255,255,.07); border-color: var(--hairline-strong);  color: var(--text-2); }
 .chip[data-s="haftaSonu"]   { background: rgba(255,255,255,.05); border-color: var(--hairline);         color: var(--text-3); }
@@ -451,7 +451,7 @@ body {
 @keyframes cell-in { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
 .cell[data-s="mesaide"]     { background: linear-gradient(180deg, hsl(152 55% 52% / .38), hsl(152 55% 44% / .2)); }
 .cell[data-s="nobetci"]     { background: linear-gradient(180deg, hsl(34 92% 62%), hsl(24 88% 54%)); }
-.cell[data-s="nobetErtesi"] { background: linear-gradient(180deg, hsl(268 70% 62% / .42), hsl(268 70% 54% / .22)); }
+.cell[data-s="nobetErtesi"] { background: linear-gradient(180deg, hsl(353 82% 60%), hsl(347 78% 50%)); }
 .cell[data-s="izinli"]      { background: repeating-linear-gradient(125deg, hsl(200 60% 62% / .3) 0 4px, transparent 4px 8px); border-color: hsl(200 60% 62% / .24); }
 .cell[data-s="rotasyon"]    { background: repeating-linear-gradient(125deg, rgba(255,255,255,.16) 0 3px, transparent 3px 7px); }
 .cell[data-s="haftaSonu"]   { background: rgba(255,255,255,.035); }
@@ -567,7 +567,7 @@ body {
 }
 .cal-d[data-s="mesaide"]     { background: hsl(152 55% 50% / .2); color: hsl(152 60% 84%); }
 .cal-d[data-s="nobetci"]     { background: linear-gradient(180deg, hsl(34 92% 60%), hsl(24 88% 52%)); color: #241202; font-weight: 660; }
-.cal-d[data-s="nobetErtesi"] { background: hsl(268 70% 60% / .3); color: hsl(268 80% 88%); }
+.cal-d[data-s="nobetErtesi"] { background: hsl(353 80% 56% / .42); color: hsl(353 90% 90%); font-weight: 600; }
 .cal-d[data-s="izinli"]      { background: repeating-linear-gradient(125deg, hsl(200 60% 62% / .28) 0 4px, transparent 4px 8px); color: hsl(200 70% 84%); }
 .cal-d[data-s="rotasyon"]    { background: repeating-linear-gradient(125deg, rgba(255,255,255,.13) 0 3px, transparent 3px 7px); }
 .cal-d[data-s="haftaSonu"]   { opacity: .4; }
@@ -799,3 +799,28 @@ body {
 }
 .make-home:hover { color: var(--text-2); background: rgba(255,255,255,.09); }
 .make-home:active { transform: scale(.94); }
+
+/* ---------- Veri notları: açılır kapanır ---------- */
+.notes { padding: 0; }
+.notes > summary {
+  display: flex; align-items: center; gap: 9px;
+  padding: 14px 16px; cursor: pointer; list-style: none;
+  transition: background .3s var(--ease);
+}
+.notes > summary::-webkit-details-marker { display: none; }
+.notes > summary::after {
+  content: ''; margin-left: auto; flex: none;
+  width: 7px; height: 7px; border-right: 1.6px solid var(--text-3);
+  border-bottom: 1.6px solid var(--text-3);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform .35s var(--spring);
+}
+.notes[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.notes > summary:hover { background: rgba(255,255,255,.03); }
+.notes-count {
+  font-size: 10.5px; font-weight: 600; color: var(--text-3);
+  background: rgba(255,255,255,.07); border: 1px solid var(--hairline);
+  border-radius: 999px; padding: 1px 7px; line-height: 1.6;
+}
+.notes ul { margin: 0; padding: 0 16px 16px 34px; }
+.notes[open] ul { animation: rise .4s var(--ease) both; }

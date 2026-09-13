@@ -192,7 +192,7 @@ function tomorrowHTML(db, residentId, date, opts, hospitalId) {
 }
 
 /** "Bu hafta: Çar yok · Sal ve Cum 16:00'da çıkar" */
-function outlookHTML(db, residentId, date, opts) {
+function outlookHTML(db, residentId, date, opts, label) {
   const w = S.weekOutlook(db, residentId, date, opts);
   const liste = (arr) => arr.length === 1 ? arr[0].label
     : arr.slice(0, -1).map((x) => x.label).join(', ') + ' ve ' + arr[arr.length - 1].label;
@@ -206,7 +206,7 @@ function outlookHTML(db, residentId, date, opts) {
     bits.push(`<b>${liste(w.yok)}</b> yok`);
   }
   if (w.erken.length) bits.push(`<b>${liste(w.erken)}</b> ${w.erken[0].at}’da çıkar`);
-  return `<p class="outlook">Bu hafta ${bits.length ? bits.join(' · ') : '<b>tam gün</b> burada'}</p>`;
+  return `<p class="outlook">${label} ${bits.length ? bits.join(' · ') : '<b>tam gün</b> burada'}</p>`;
 }
 
 function personHTML(db, p, hospitalId, wd, np, date, opts, leadId) {
@@ -230,7 +230,8 @@ function personHTML(db, p, hospitalId, wd, np, date, opts, leadId) {
       </div>
       <div class="p-rail">${rail(wd, { ...p, hue: r.hue }, p.status.present, np)}</div>
       ${tomorrowHTML(db, r.id, date, opts, hospitalId)}
-      ${outlookHTML(db, r.id, date, opts)}
+      ${outlookHTML(db, r.id, date, opts, 'Bu hafta')}
+      ${outlookHTML(db, r.id, S.addDays(date, 7), opts, 'Gelecek hafta')}
     </button>`;
 }
 
@@ -288,39 +289,9 @@ export function panelHTML(db, hospitalId, date, opts) {
     : `<div class="card empty-state"><p class="eyebrow">Kayıt yok</p>
        <p>Bu hastanede bu tarih için kadro ya da nöbet tanımlı değil.</p></div>`;
 
-  /* --- Haftalık bar --- */
-  const wm = S.weekMatrix(db, hospitalId, date, opts);
-  const week = `
-    <div class="section-title"><h2>Bu hafta</h2>
-      <span class="eyebrow">${S.parseIso(wm.days[0]).getDate()} – ${S.formatLongDate(wm.days[6])}</span></div>
-    <div class="card week">
-      <div class="week-head">
-        <span class="eyebrow">Asistan</span>
-        <div class="week-days">
-          ${wm.days.map((dd) => `<span${dd === date ? ' data-today' : ''}>${S.GUN_KISA[S.parseIso(dd).getDay()]}</span>`).join('')}
-        </div>
-      </div>
-      ${wm.rows.map((row) => {
-        const r = db.residents.find((x) => x.id === row.residentId);
-        return `<div class="week-row">
-          <span class="week-name" style="color:hsl(${r.hue}deg 70% 78%)">${esc(r.short)}</span>
-          <div class="week-cells">
-            ${row.cells.map((c, i) => `<i class="cell" style="animation-delay:${i * 28}ms"
-                data-s="${c.status.id}" ${c.duty && !c.dutyHere ? 'data-away' : ''}
-                ${c.date === date ? 'data-today' : ''} ${c.conflict ? 'data-conflict' : ''}
-                title="${esc(S.formatLongDate(c.date))} — ${esc(c.status.label)}"></i>`).join('')}
-          </div>
-        </div>`;
-      }).join('')}
-      <div class="legend">
-        <b><i style="background:linear-gradient(180deg,hsl(34 92% 62%),hsl(24 88% 54%))"></i>Nöbetçi</b>
-        <b><i style="background:hsl(34 92% 62% / .2);box-shadow:inset 0 0 0 1.5px hsl(34 92% 62% / .7)"></i>Başka hastanede nöbet</b>
-        <b><i style="background:hsl(152 55% 50% / .4)"></i>Mesaide</b>
-        <b><i style="background:hsl(268 70% 60% / .4)"></i>Nöbet ertesi</b>
-        <b><i style="background:repeating-linear-gradient(125deg,hsl(200 60% 62% / .5) 0 4px,transparent 4px 8px)"></i>Yıllık izin</b>
-        <b><i style="background:repeating-linear-gradient(125deg,rgba(255,255,255,.25) 0 3px,transparent 3px 7px)"></i>Rotasyonda</b>
-      </div>
-    </div>`;
+  /* --- Haftalık barlar: bu hafta + gelecek hafta --- */
+  const week = weekCardHTML(db, hospitalId, date, opts, 'Bu hafta', date, false) +
+               weekCardHTML(db, hospitalId, S.addDays(date, 7), opts, 'Gelecek hafta', date, true);
 
   const conflicts = d.rows.filter((p) => p.conflict)
     .map((p) => `${db.residents.find((x) => x.id === p.residentId).name} · ${S.formatLongDate(p.date)} hem nöbet hem nöbet ertesi izin.`);
@@ -340,14 +311,53 @@ export function panelHTML(db, hospitalId, date, opts) {
       ${people}
       ${banner}
       ${week}
-      <div class="card notes">
-        <p class="eyebrow">Veri notları</p>
+      <details class="card notes">
+        <summary><span class="eyebrow">Veri notları</span>
+          <span class="notes-count">${conflicts.length + db.dataNotes.length}</span></summary>
         <ul>${[...conflicts, ...db.dataNotes].map((n) => `<li>${esc(n)}</li>`).join('')}</ul>
-      </div>
+      </details>
       ${hint}
       <p class="foot"><b style="color:var(--text-2);font-weight:600">Find My Asistan</b><br>
         ${esc(db.meta.source)}<br>Mesai ${wd.start}–${wd.end} · nöbetçi çıkışı ${wd.dutyLeave}</p>`
   };
+}
+
+/** Tek bir haftanın barı. `today` bugünü işaretlemek için (gelecek haftada eşleşmez). */
+function weekCardHTML(db, hospitalId, anchor, opts, label, today, showLegend) {
+  const wm = S.weekMatrix(db, hospitalId, anchor, opts);
+  if (!wm.rows.length) return '';
+  const bas = S.parseIso(wm.days[0]).getDate();
+  return `
+    <div class="section-title"><h2>${label}</h2>
+      <span class="eyebrow">${bas} – ${S.formatLongDate(wm.days[6])}</span></div>
+    <div class="card week">
+      <div class="week-head">
+        <span class="eyebrow">Asistan</span>
+        <div class="week-days">
+          ${wm.days.map((dd) => `<span${dd === today ? ' data-today' : ''}>${S.GUN_KISA[S.parseIso(dd).getDay()]}</span>`).join('')}
+        </div>
+      </div>
+      ${wm.rows.map((row) => {
+        const r = db.residents.find((x) => x.id === row.residentId);
+        return `<div class="week-row">
+          <span class="week-name" style="color:hsl(${r.hue}deg 70% 78%)">${esc(r.short)}</span>
+          <div class="week-cells">
+            ${row.cells.map((c, i) => `<i class="cell" style="animation-delay:${i * 28}ms"
+                data-s="${c.status.id}" ${c.duty && !c.dutyHere ? 'data-away' : ''}
+                ${c.date === today ? 'data-today' : ''} ${c.conflict ? 'data-conflict' : ''}
+                title="${esc(S.formatLongDate(c.date))} — ${esc(c.status.label)}"></i>`).join('')}
+          </div>
+        </div>`;
+      }).join('')}
+      ${showLegend ? `<div class="legend">
+        <b><i style="background:linear-gradient(180deg,hsl(34 92% 62%),hsl(24 88% 54%))"></i>Nöbetçi</b>
+        <b><i style="background:hsl(34 92% 62% / .2);box-shadow:inset 0 0 0 1.5px hsl(34 92% 62% / .7)"></i>Başka hastanede nöbet</b>
+        <b><i style="background:hsl(152 55% 50% / .4)"></i>Mesaide</b>
+        <b><i style="background:linear-gradient(180deg,hsl(353 82% 60%),hsl(347 78% 50%))"></i>Nöbet ertesi · yok</b>
+        <b><i style="background:repeating-linear-gradient(125deg,hsl(200 60% 62% / .5) 0 4px,transparent 4px 8px)"></i>Yıllık izin</b>
+        <b><i style="background:repeating-linear-gradient(125deg,rgba(255,255,255,.25) 0 3px,transparent 3px 7px)"></i>Rotasyonda</b>
+      </div>` : ''}
+    </div>`;
 }
 
 /** Dört hastaneyi de yan yana kurar */

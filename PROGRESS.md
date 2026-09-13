@@ -68,6 +68,15 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
 
+## v7 — ameliyat planlama ayarları (13.09.2026)
+- **Gelecek hafta barı** eklendi. Gerekçe: hoca "bugün ameliyat gelirse haftaya hangi gün
+  müsait" diye bakıyor; pazar günü yalnızca geçmiş hafta görünüyordu. Kartta da
+  "Gelecek hafta ..." satırı var.
+- **Nöbet ertesi rengi mordan kırmızıya** çevrildi. Gerekçe: kliniği en çok etkileyen
+  faktör asistanın o gün olmaması, en dikkat çekici renk onda olmalı.
+- **Veri notları açılır kapanır** oldu (varsayılan kapalı, rozet sayıyı gösteriyor).
+- Haftalık bar açıklaması iki karttan birine indirildi.
+
 ## v6 — otomatik senkron (13.09.2026)
 - `find-my-asistan-sync` zamanlanmış görevi kuruldu: her ayın 29'u 09:00.
   Drive → içe aktar → doğrula → sw VERSION artır → commit + push.
