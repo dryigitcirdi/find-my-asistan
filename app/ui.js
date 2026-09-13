@@ -244,16 +244,14 @@ export function panelHTML(db, hospitalId, date, opts) {
   const leadId = (db.leads[month] || {})[hospitalId] || null;
   const np = nowPercent(wd);
 
-  const dutyNames = d.onDuty.map((r) => db.residents.find((x) => x.id === r.residentId).short);
-  // Kadrosu burada ama nöbeti başka hastanede olanlar — gözlemci için önemli
+  const isim = (r) => db.residents.find((x) => x.id === r.residentId).short;
+  // Durum satırı kadro odaklı olmalı: misafir nöbetçi buradan çıkmıyor, kendi hastanesinden.
+  const kadroDuty = d.onDuty.filter((r) => r.basedHere);
   const awayDuty = d.rows.filter((r) => r.onSiteDay && r.duty && r.duty.h !== hospitalId);
   let note;
   if (d.tone === 'empty') note = 'Bu hastane için kadro tanımlanmamış. Ayarlar’dan atama yapabilirsin.';
-  else if (d.onDuty.length) note = `${dutyNames.join(', ')} nöbetçi · mesaiden ${wd.dutyLeave}’da çıkar`;
-  else if (awayDuty.length) {
-    const names = awayDuty.map((r) => db.residents.find((x) => x.id === r.residentId).short);
-    note = `${names.join(', ')} ${wd.dutyLeave}’da çıkar · nöbeti başka hastanede`;
-  }
+  else if (kadroDuty.length) note = `${kadroDuty.map(isim).join(', ')} nöbetçi · mesaiden ${wd.dutyLeave}’da çıkar`;
+  else if (awayDuty.length) note = `${awayDuty.map(isim).join(', ')} ${wd.dutyLeave}’da çıkar · nöbeti başka hastanede`;
   else if (d.restDay) note = 'Hafta sonu — rutin mesai yok.';
   else if (d.present === 0) note = 'Bugün kadrodan kimse sahada değil.';
   else if (d.present < d.expected) note = `${d.expected - d.present} kişi izinli, nöbet ertesi ya da rotasyonda.`;
@@ -284,10 +282,24 @@ export function panelHTML(db, hospitalId, date, opts) {
       ${outside.map((o) => `<span><b style="color:hsl(${o.r.hue}deg 70% 78%)">${esc(o.r.short)}</b> · ${esc(o.label)}</span>`).join('<i class="dotsep"></i>')}
     </p>` : '';
 
-  const people = d.rows.length
-    ? `<div class="people stagger">${d.rows.map((p) => personHTML(db, p, hospitalId, wd, np, date, opts, leadId)).join('')}</div>`
-    : `<div class="card empty-state"><p class="eyebrow">Kayıt yok</p>
-       <p>Bu hastanede bu tarih için kadro ya da nöbet tanımlı değil.</p></div>`;
+  // Kadro = bu hastanenin asistanı. Misafir = yalnızca nöbet için gelen başka hastane asistanı.
+  const kadroRows = d.rows.filter((p) => p.basedHere);
+  const misafir = d.rows.filter((p) => p.visiting);
+
+  const people = kadroRows.length
+    ? `<div class="people stagger">${kadroRows.map((p) => personHTML(db, p, hospitalId, wd, np, date, opts, leadId)).join('')}</div>`
+    : `<div class="card empty-state"><p class="eyebrow">Kadro yok</p>
+       <p>Bu ay bu hastanede kadrolu asistan tanımlı değil.</p></div>`;
+
+  const misafirHTML = misafir.length ? `
+    <p class="visitors">
+      <span class="eyebrow">${d.restDay ? 'Bugün burada nöbetçi' : 'Bu gece burada nöbetçi'}</span>
+      ${misafir.map((p) => {
+        const r = db.residents.find((x) => x.id === p.residentId);
+        const h = db.hospitals.find((x) => x.id === p.home);
+        return `<span><b style="color:hsl(${r.hue}deg 70% 78%)">${esc(r.name)}</b>${h ? ` · kadrosu ${esc(h.name)}` : ''}</span>`;
+      }).join('<i class="dotsep"></i>')}
+    </p>` : '';
 
   /* --- Haftalık barlar: bu hafta + gelecek hafta --- */
   const week = weekCardHTML(db, hospitalId, date, opts, 'Bu hafta', date, false) +
@@ -309,6 +321,7 @@ export function panelHTML(db, hospitalId, date, opts) {
     hue: h.hue,
     html: `${hero}
       ${people}
+      ${misafirHTML}
       ${banner}
       ${week}
       <details class="card notes">

@@ -168,10 +168,13 @@ export function hospitalDay(db, hospitalId, date, opts = {}) {
 /** Haftalik bar icin: asistan x 7 gun durum matrisi */
 export function weekMatrix(db, hospitalId, date, opts = {}) {
   const days = weekOf(date);
-  const assigned = db.assignments[monthKey(date)] || {};
+  // Yalnizca bu hastanenin kadrosu. Nobet icin gelen misafirler baris karistiriyordu:
+  // hoca kendi asistanini ariyor, baska hastanenin asistani listede olmamali.
   const ids = new Set();
-  db.residents.forEach((r) => { if (assigned[r.id] === hospitalId) ids.add(r.id); });
-  days.forEach((d) => db.duties.forEach((x) => { if (x.d === d && x.h === hospitalId) ids.add(x.r); }));
+  days.forEach((d) => {
+    const assigned = db.assignments[monthKey(d)] || {};
+    db.residents.forEach((r) => { if (assigned[r.id] === hospitalId) ids.add(r.id); });
+  });
 
   return {
     days,

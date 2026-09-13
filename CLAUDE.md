@@ -46,6 +46,16 @@ Nöbetin hangi hastanede olduğu barda **gösterilmez**: gözlemci için önemli
 "burada mı, kaçta çıkıyor". Nöbet yeri asistan kartının metninde yazıyor.
 Eskiden sarı çerçeve + gri iç kullanılıyordu; "o gün yok" izlenimi verdiği için kaldırıldı.
 
+## Kadro mu, misafir mi
+Hastane sayfası **yalnızca o hastanenin kadrosunu** listeler ve haftalık bar da yalnızca
+kadroyu gösterir. Nöbet için gelen başka hastanenin asistanı ana listeye girmez;
+"Bu gece burada nöbetçi" diye ayrı, sönük bir satırda görünür.
+
+Gerekçe: hoca kendi asistanını arıyor. Maslak sayfasında Metehan ve Tarık'ın çıkması
+(çünkü orada nöbetleri var) "Maslak'ın asistanı kim?" sorusunu bulanıklaştırıyordu.
+Üstteki durum satırı da kadro odaklı: misafir nöbetçi buradan değil kendi hastanesinden
+16:00'da çıkar, o yüzden onun adı durum satırında geçmez.
+
 ## Ekran düzeni — neden böyle
 Panel, **asistan kartıyla başlar**. Kullanıcılar (18 hoca) kendi hastanesinin tek-iki
 asistanını görmek için açıyor; toplam sayaç onları aşağı itiyordu. Üstteki büyük sayaç
