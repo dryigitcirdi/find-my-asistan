@@ -68,6 +68,19 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
 
+## v10 — yayında ve kullanımda (13.09.2026)
+Link 18 hocayla paylaşıldı. Sürüm 36.
+
+### Sonraki tur için biriken fikirler
+- Hafta sonları "Bu hafta" barı tümüyle geçmişte kalıyor; o günlerde gelecek haftayı
+  öne almak mantıklı olabilir
+- Yıllık izin hâlâ mavi taralı; "yok" demek olan her şeyi kırmızı ailesine almak
+  düşünülebilir (kullanıcıya soruldu, karar verilmedi)
+- Asistan sorumlusu alanı veride boş duruyor, arayüzden kaldırıldı
+- Şifre gerekirse Netlify/Cloudflare Pages'e taşınabilir (GitHub Pages ücretsiz planda
+  şifre desteklemiyor)
+- Ameliyat planlaması için iki hafta yetiyor mu, aylık görünüm karta alınmalı mı
+
 ## v9 — kadro/misafir ayrımı ve sade ayarlar (13.09.2026)
 - Hastane sayfası yalnızca kendi kadrosunu listeliyor; nöbet için gelen asistan
   ayrı "Bu gece burada nöbetçi" satırında.
