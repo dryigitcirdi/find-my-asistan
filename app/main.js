@@ -171,6 +171,15 @@ function stopTicking() {
     }
   });
 
+  // Yüklü sürümü altbilgide göster — "telefonumda hangi sürüm var?" sorusunun cevabı
+  fetch(new URL('../sw.js', import.meta.url), { cache: 'no-store' })
+    .then((r) => r.text())
+    .then((t) => {
+      const v = (t.match(/asistan-panel-v(\d+)/) || [])[1];
+      if (v) document.querySelectorAll('[data-version]').forEach((n) => { n.textContent = `· sürüm ${v}`; });
+    })
+    .catch(() => {});
+
   // Çevrimdışı çalışma (yalnızca http/https üzerinden)
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     navigator.serviceWorker.register(new URL('../sw.js', import.meta.url))

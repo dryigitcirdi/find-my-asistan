@@ -317,7 +317,8 @@ export function panelHTML(db, hospitalId, date, opts) {
         <ul>${[...conflicts, ...db.dataNotes].map((n) => `<li>${esc(n)}</li>`).join('')}</ul>
       </details>
       ${hint}
-      <p class="foot"><b style="color:var(--text-2);font-weight:600">Find My Asistan</b><br>
+      <p class="foot"><b style="color:var(--text-2);font-weight:600">Find My Asistan</b>
+        <span class="ver" data-version>·</span><br>
         ${esc(db.meta.source)}<br>Mesai ${wd.start}–${wd.end} · nöbetçi çıkışı ${wd.dutyLeave}</p>`
   };
 }

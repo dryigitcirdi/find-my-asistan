@@ -836,3 +836,5 @@ body {
 }
 .notes ul { margin: 0; padding: 0 16px 16px 34px; }
 .notes[open] ul { animation: rise .4s var(--ease) both; }
+
+.foot .ver { color: var(--text-3); opacity: .75; }
