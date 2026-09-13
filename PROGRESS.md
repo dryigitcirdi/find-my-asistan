@@ -68,6 +68,14 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
 
+## v9 — kadro/misafir ayrımı ve sade ayarlar (13.09.2026)
+- Hastane sayfası yalnızca kendi kadrosunu listeliyor; nöbet için gelen asistan
+  ayrı "Bu gece burada nöbetçi" satırında.
+- Ayarlardan mesai saati, kadro ve asistan sorumlusu kaldırıldı — Drive'dan okunuyor.
+  Geriye ana hastane seçimi, okunur veri özeti ve "Veriyi şimdi yenile" kaldı.
+- Service worker "önce ağ"a geçti; güncellemeler tek açılışta geliyor.
+- Altbilgide yüklü sürüm görünüyor.
+
 ## v8 — haftalık bar renk dili sadeleşti (13.09.2026)
 "Başka hastanede nöbet" sarı çerçeve + gri iç olarak gösteriliyordu ve asistan o gün
 yokmuş gibi duruyordu. Oysa gün boyu burada, sadece 16:00'da çıkıyor. Artık nöbetçi

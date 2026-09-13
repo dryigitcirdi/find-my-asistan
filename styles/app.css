@@ -596,6 +596,7 @@ body {
   margin-bottom: 7px;
 }
 .set-row label { flex: 1; font-size: 14px; min-width: 0; }
+.set-row:not(:has(select)):not(:has(input)):not(:has(button)) { background: transparent; border-style: dashed; }
 .set-row small { display: block; font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
 .set-row select, .set-row input[type="time"] {
   font: inherit; font-size: 13.5px;
@@ -845,3 +846,8 @@ body {
   margin: 14px 2px 0; font-size: 12.5px; color: var(--text-3);
 }
 .visitors .eyebrow { width: 100%; margin: 0 0 2px; }
+
+/* ---------- Ayarlarda bilgi notu ---------- */
+.set-note {
+  margin: 12px 2px 0; font-size: 12px; line-height: 1.5; color: var(--text-3);
+}

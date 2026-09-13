@@ -1,13 +1,9 @@
-// Kullanici tercihleri ve veri duzeltmeleri — localStorage.
+// Kullanici tercihi — yalnizca ana hastane.
+// Mesai saatleri, kadro ve rotasyon Drive'dan okunuyor; uygulamadan degistirilmiyor.
+// (Degistirilebilse bile localStorage'da kalirdi, yani yalnizca o telefonu etkilerdi.)
 const KEY = 'asistan-panel/v1';
 
-const DEFAULTS = {
-  homeHospitalId: null,    // ana hastane — uygulama hep burada acilir, kaydirma bunu degistirmez
-  weekendShift: false,     // hafta sonu rutin mesai var mi?
-  workday: null,           // { start, end, dutyLeave } — null ise veri dosyasindaki kullanilir
-  assignments: {},         // { 'YYYY-MM': { residentId: hospitalId } } — kadro duzeltmeleri
-  leads: {},               // { 'YYYY-MM': { hospitalId: residentId } } — asistan sorumlulari
-};
+const DEFAULTS = { homeHospitalId: null };
 
 function read() {
   try {
@@ -24,7 +20,7 @@ export const settings = () => state;
 
 export function update(patch) {
   state = { ...state, ...patch };
-  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ }
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* gizli sekme */ }
   listeners.forEach((fn) => fn(state));
   return state;
 }
@@ -32,20 +28,4 @@ export function update(patch) {
 export function onChange(fn) {
   listeners.add(fn);
   return () => listeners.delete(fn);
-}
-
-export function setAssignment(month, residentId, hospitalId) {
-  const next = { ...state.assignments, [month]: { ...(state.assignments[month] || {}), [residentId]: hospitalId } };
-  return update({ assignments: next });
-}
-
-export function setLead(month, hospitalId, residentId) {
-  const next = { ...state.leads, [month]: { ...(state.leads[month] || {}), [hospitalId]: residentId } };
-  return update({ leads: next });
-}
-
-export function reset() {
-  try { localStorage.removeItem(KEY); } catch { /* yoksay */ }
-  state = { ...DEFAULTS };
-  listeners.forEach((fn) => fn(state));
 }

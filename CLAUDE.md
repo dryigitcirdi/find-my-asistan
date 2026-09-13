@@ -46,6 +46,13 @@ Nöbetin hangi hastanede olduğu barda **gösterilmez**: gözlemci için önemli
 "burada mı, kaçta çıkıyor". Nöbet yeri asistan kartının metninde yazıyor.
 Eskiden sarı çerçeve + gri iç kullanılıyordu; "o gün yok" izlenimi verdiği için kaldırıldı.
 
+## Ayarlarda ne var, ne yok
+Değiştirilebilen tek şey **ana hastane**. Mesai saatleri, kadro, rotasyon ve asistan
+sorumluları kaldırıldı: hepsi Drive'dan okunuyor ve herkes aynı veriyi görmeli.
+Ayrıca localStorage'daki düzenleme yalnızca o telefonu etkiliyordu, yani paylaşılan
+bir panelde yanıltıcıydı. Ayarlar sayfası şimdi ana hastane seçimi + okunur veri
+özeti + "Veriyi şimdi yenile" (önbelleği temizleyip yeniden yükler).
+
 ## Kadro mu, misafir mi
 Hastane sayfası **yalnızca o hastanenin kadrosunu** listeler ve haftalık bar da yalnızca
 kadroyu gösterir. Nöbet için gelen başka hastanenin asistanı ana listeye girmez;
@@ -66,7 +73,7 @@ bugün nerede / kaçta çıkar → yarın ne olacak → bu hafta hangi gün yok.
 ```
 index.html            tek sayfa: seçim ekranı + yatay kaydırmalı hastane sayfaları
 styles/app.css        tüm stil; renkler CSS değişkeni (--accent, --ambient-*)
-app/data.js           schedule.json'u yükler + kullanıcı düzenlemelerini (localStorage) birleştirir
+app/data.js           schedule.json'u yükler (kullanıcı düzenlemesi yok)
 app/schedule.js       durum motoru — saf fonksiyonlar, DOM bilmez
 app/ui.js             render — panelHTML() bir hastane sayfası üretir, renderPager() dördünü kurar
 app/sheet.js          asistan detayı ve ayarlar alt sayfası

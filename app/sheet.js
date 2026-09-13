@@ -1,6 +1,6 @@
 // Alt sayfa (bottom sheet) — asistan detayi ve ayarlar.
 import * as S from './schedule.js';
-import { settings, update, setAssignment, setLead, reset } from './store.js';
+import { settings, update } from './store.js';
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -122,23 +122,19 @@ export function openResident(db, residentId, date, opts) {
 
 export function openSettings(db, date, onSaved) {
   const s = settings();
-  const month = S.monthKey(date);
-  const wd = db.meta.workday;
-  const assigned = db.assignments[month] || {};
-  const leads = db.leads[month] || {};
+  const aylar = [...new Set(db.duties.map((d) => d.d.slice(0, 7)))].sort();
+  const ayAdi = (m) => `${S.AY_UZUN[Number(m.slice(5)) - 1]} ${m.slice(0, 4)}`;
 
   open(`
     <div class="sheet-head">
-      <div><h2>Ayarlar</h2>
-        <p class="p-sub" style="margin-top:3px"><span>${esc(S.AY_UZUN[Number(month.slice(5)) - 1])} ${month.slice(0, 4)} dönemi</span></p>
-      </div>
+      <div><h2>Ayarlar</h2></div>
       ${closeBtn}
     </div>
 
     <div class="set">
-      <p class="eyebrow">Ana hastane <span style="text-transform:none;letter-spacing:0">— uygulama hep burada açılır</span></p>
+      <p class="eyebrow">Ana hastane</p>
       <div class="set-row">
-        <label>Ana hastanem</label>
+        <label>Uygulama hep burada açılsın<small>Yana kaydırmak bunu değiştirmez</small></label>
         <select data-home>
           ${db.hospitals.map((h) =>
             `<option value="${h.id}"${s.homeHospitalId === h.id ? ' selected' : ''}>${esc(h.name)}</option>`).join('')}
@@ -147,76 +143,30 @@ export function openSettings(db, date, onSaved) {
     </div>
 
     <div class="set">
-      <p class="eyebrow">Mesai düzeni</p>
-      <div class="set-row"><label>Mesai başlangıcı</label>
-        <input type="time" data-wd="start" value="${wd.start}"></div>
-      <div class="set-row"><label>Mesai bitişi</label>
-        <input type="time" data-wd="end" value="${wd.end}"></div>
-      <div class="set-row"><label>Nöbetçi çıkış saati<small>Nöbet tutacak asistanın gündüz çıkışı</small></label>
-        <input type="time" data-wd="dutyLeave" value="${wd.dutyLeave}"></div>
-      <div class="set-row"><label>Hafta sonu rutin mesai<small>Kapalıyken cumartesi–pazar yalnızca nöbet görünür</small></label>
-        <button class="toggle" role="switch" id="tg-weekend" aria-checked="${s.weekendShift}"></button></div>
+      <p class="eyebrow">Veri</p>
+      <div class="set-row"><label>Kaynak<small>${esc(db.meta.source)}</small></label></div>
+      <div class="set-row"><label>Nöbet listesi<small>${aylar.map(ayAdi).join(' · ') || '—'}</small></label></div>
+      <div class="set-row"><label>Kadro<small>${Object.keys(db.assignments).length} ay tanımlı · rotasyon takviminin renk kodlarından</small></label></div>
+      <div class="set-row"><label>Mesai<small>${db.meta.workday.start}–${db.meta.workday.end} · nöbetçi çıkışı ${db.meta.workday.dutyLeave}</small></label></div>
+      <p class="set-note">Nöbet, izin, kadro ve mesai düzeni Drive’daki tablolardan okunuyor.
+        Her ayın 29’unda kendiliğinden güncelleniyor; uygulamadan değiştirilmiyor ki
+        herkes aynı veriyi görsün.</p>
     </div>
 
-    <div class="set">
-      <p class="eyebrow">Kadro <span style="text-transform:none;letter-spacing:0">— rotasyon takviminden okunuyor, gerekirse değiştir</span></p>
-      ${db.residents.map((r) => `
-        <div class="set-row">
-          <label>${esc(r.name)}</label>
-          <select data-assign="${r.id}">
-            <option value="">—</option>
-            ${db.hospitals.map((h) =>
-              `<option value="${h.id}"${assigned[r.id] === h.id ? ' selected' : ''}>${esc(h.name)}</option>`).join('')}
-          </select>
-        </div>`).join('')}
-    </div>
-
-    <div class="set">
-      <p class="eyebrow">Asistan sorumluları <span style="text-transform:none;letter-spacing:0">(isteğe bağlı)</span></p>
-      ${db.hospitals.map((h) => `
-        <div class="set-row">
-          <label>${esc(h.name)}</label>
-          <select data-lead="${h.id}">
-            <option value="">—</option>
-            ${db.residents.map((r) =>
-              `<option value="${r.id}"${leads[h.id] === r.id ? ' selected' : ''}>${esc(r.short)}</option>`).join('')}
-          </select>
-        </div>`).join('')}
-    </div>
-
-    <button class="btn-ghost" id="btn-reset">Tüm düzenlemeleri sıfırla</button>
+    <button class="btn-ghost" id="btn-refresh">Veriyi şimdi yenile</button>
   `, onSaved);
 
   const sheet = root.querySelector('.sheet');
 
-  const homeSel = sheet.querySelector('[data-home]');
-  if (homeSel) homeSel.addEventListener('change', () => update({ homeHospitalId: homeSel.value }));
+  sheet.querySelector('[data-home]').addEventListener('change', (e) =>
+    update({ homeHospitalId: e.currentTarget.value }));
 
-  sheet.querySelectorAll('[data-wd]').forEach((inp) => {
-    inp.addEventListener('change', () => {
-      const next = { ...(settings().workday || db.meta.workday), [inp.dataset.wd]: inp.value };
-      update({ workday: next });
-    });
-  });
-
-  const tg = sheet.querySelector('#tg-weekend');
-  tg.addEventListener('click', () => {
-    const on = tg.getAttribute('aria-checked') !== 'true';
-    tg.setAttribute('aria-checked', String(on));
-    update({ weekendShift: on });
-  });
-
-  sheet.querySelectorAll('[data-assign]').forEach((sel) => {
-    sel.addEventListener('change', () => setAssignment(month, sel.dataset.assign, sel.value || null));
-  });
-  sheet.querySelectorAll('[data-lead]').forEach((sel) => {
-    sel.addEventListener('change', () => setLead(month, sel.dataset.lead, sel.value || null));
-  });
-
-  sheet.querySelector('#btn-reset').addEventListener('click', () => {
-    if (confirm('Mesai saatleri, kadro atamaları ve sorumlu seçimleri sıfırlansın mı?')) {
-      reset();
-      close();
-    }
+  sheet.querySelector('#btn-refresh').addEventListener('click', async (e) => {
+    e.currentTarget.textContent = 'Yenileniyor…';
+    try {
+      for (const k of await caches.keys()) await caches.delete(k);
+      for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+    } catch { /* desteklenmiyorsa yoksay */ }
+    location.reload();
   });
 }
