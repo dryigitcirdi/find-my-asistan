@@ -68,6 +68,15 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
 
+## v6 — otomatik senkron (13.09.2026)
+- `find-my-asistan-sync` zamanlanmış görevi kuruldu: her ayın 29'u 09:00.
+  Drive → içe aktar → doğrula → sw VERSION artır → commit + push.
+- Nöbet ve izin verisi artık elle girilmiyor; `tools/import-duties.js` ve
+  `tools/import-leaves.js` Drive metnini ayrıştırıyor. Doğrulama: ayrıştırıcı
+  elle girilen Eylül verisini birebir üretti (44 nöbet, 26 ertesi izin, 0 fark).
+- `tools/verify.js` yayın öncesi sağlık kontrolü yapıyor; hata varsa commit yok.
+- **Ana hastane** artık kalıcı, yana kaydırmak değiştirmiyor.
+
 ## v5 — gözlemci odaklı düzen (12.09.2026)
 - Panel artık **asistan kartıyla başlıyor**; büyük sayaç kartı tek satırlık duruma indi.
   Hoca uygulamayı açınca ilk ekranda kendi asistanının durumunu görüyor.

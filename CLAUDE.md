@@ -51,6 +51,20 @@ app/main.js           yönlendirme + olaylar
 data/schedule.json    Drive'dan aktarılan nöbet/izin/rotasyon verisi
 ```
 
+## Aylık otomatik senkron
+Zamanlanmış görev: `find-my-asistan-sync` (her ayın 29'u, 09:00).
+Tanım: `~/.claude/scheduled-tasks/find-my-asistan-sync/SKILL.md`
+
+Yaptığı: Drive'dan nöbet + yıllık izin tablolarını metin olarak çeker,
+`tools/import-duties.js` ve `tools/import-leaves.js` ile veriye işler,
+`tools/verify.js` ile doğrular, `sw.js` VERSION'ını artırır, commit + push eder.
+Doğrulama hata verirse commit etmez.
+
+**Kadroya ve rotasyona dokunmaz** — onlar renk kodlarından geliyor ve 2030'a kadar dolu.
+Rotasyon değişirse elle: `node tools/import-rotation.js <xlsx>`
+
+Görev yalnızca Claude uygulaması açıkken çalışır; kapalıysa bir sonraki açılışta çalışır.
+
 ## Gündüz kadrosu nereden geliyor
 Kadro, `Asistan Rotasyon Takvimi` sayfasında **yazıyla değil hücre dolgu rengiyle** tutuluyor.
 Renk anahtarı sayfanın kendi içinde, 20-23. satırlarda:
