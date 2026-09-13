@@ -45,9 +45,12 @@ const pager = () => document.getElementById('pager');
 function goHospitals() {
   onDayScreen = false;
   stopTicking();
-  // Izgaradan seçmek ana hastaneyi belirler; yana kaydırmak belirlemez.
-  UI.renderHospitals(db(), today(), opts(), (id) => { update({ homeHospitalId: id }); goDay(id); },
-                     hospitalsOrdered(), settings().homeHospitalId);
+  // Ana hastane yalnızca ilk açılışta burada belirlenir; sonrasında Ayarlar'dan.
+  // Izgaraya sonradan girmek sadece o hastaneye bakmak demek, seçimi değiştirmez.
+  UI.renderHospitals(db(), today(), opts(), (id) => {
+    if (!settings().homeHospitalId) update({ homeHospitalId: id });
+    goDay(id);
+  }, hospitalsOrdered(), settings().homeHospitalId);
   UI.setTone('pick', null);
   UI.showScreen('hospitals');
 }
@@ -71,7 +74,7 @@ function goDay(hospitalId) {
   // Başlık/nokta/ton kaydırma konumuna bakmadan doğrudan ayarlanır.
   // (Yerleşim hazır değilken scrollLeft okunamıyor; buna güvenmek ekranı "—" bırakıyordu.)
   active = index;
-  UI.setActivePage(panels, index, settings().homeHospitalId);
+  UI.setActivePage(panels, index);
   settleScroll(index);
 
   bindPagerScroll();
@@ -113,7 +116,7 @@ function syncActive() {
   const i = Math.round(el.scrollLeft / el.clientWidth);
   if (i === active || !panels[i]) return;
   active = i;
-  UI.setActivePage(panels, i, settings().homeHospitalId);
+  UI.setActivePage(panels, i);
 }
 
 function openSettings() {
@@ -193,10 +196,6 @@ async function kendiniOnar(err) {
     on('btn-grid', goHospitals);
     on('btn-grid-2', goHospitals);
     on('btn-settings', openSettings);
-    on('make-home', (e) => {
-      update({ homeHospitalId: e.currentTarget.dataset.id });
-      UI.setActivePage(panels, active, e.currentTarget.dataset.id);
-    });
 
     const last = params.get('h') || settings().homeHospitalId;
     if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();

@@ -47,6 +47,11 @@ Nöbetin hangi hastanede olduğu barda **gösterilmez**: gözlemci için önemli
 Eskiden sarı çerçeve + gri iç kullanılıyordu; "o gün yok" izlenimi verdiği için kaldırıldı.
 
 ## Hastane sırası
+Ana hastane **yalnızca ilk açılışta** sorulur (seçim ekranı), sonrasında yalnızca
+Ayarlar'dan değişir. Sonradan ızgaraya girip başka hastaneye bakmak seçimi değiştirmez.
+Her sayfada çıkan "X ana hastanem olsun" önerisi kaldırıldı: tekrar eden, bilgi taşımayan
+bir satırdı.
+
 `hospitalsOrdered()` (app/data.js) ana hastaneyi listenin başına alır. Hem seçim ekranı
 hem yatay kaydırma bunu kullanır — sıra ikisinde aynı olmalı, yoksa noktalar şaşırtıyor.
 Ana hastane kartında kısaltma yerine "ANA" yazar.

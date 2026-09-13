@@ -417,17 +417,10 @@ export function renderPager(db, date, opts, handlers, order) {
 }
 
 /** Görünür sayfayı işaretler: başlık, noktalar ve arka plan tonu */
-export function setActivePage(panels, index, homeId) {
+export function setActivePage(panels, index) {
   const p = panels[index];
   if (!p) return;
   const head = document.getElementById('pager-name');
-  head.classList.toggle('is-home', p.h.id === homeId);
-  const mk = document.getElementById('make-home');
-  if (mk) {
-    mk.hidden = p.h.id === homeId;
-    mk.textContent = `${p.h.name} ana hastanem olsun`;
-    mk.dataset.id = p.h.id;
-  }
   const name = head;
   if (name.textContent !== p.h.name) {
     name.textContent = p.h.name;
