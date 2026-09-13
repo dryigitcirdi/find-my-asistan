@@ -119,9 +119,17 @@ node /Users/yigit/Desktop/cod/asistan-panel/serve.js 4173
 ES modülleri `file://` üzerinden çalışmaz, mutlaka sunucu üzerinden aç.
 Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 
+## Service worker stratejisi
+**Önce ağ, sonra önbellek** (2.5 sn zaman aşımı). Önceden "önce önbellek" idi ve
+her güncelleme iki kez yenileme gerektiriyordu: ilk açılışta eski sürüm geliyor,
+yeni sürüm ancak ikinci açılışta görünüyordu. Panel 18 kişiyle paylaşıldığı için
+bu kabul edilemezdi. Artık çevrimiçiyken her zaman güncel, çevrimdışıyken önbellekten.
+İkonlar istisna: önce önbellek (hiç değişmiyorlar).
+
+`VERSION` sabitini yine de her yayında artır — çevrimdışı önbelleği tazeleyen şey o.
+
 ## Geliştirirken dikkat
-Service worker kabuk dosyalarını önbelleğe alır. CSS/JS değişikliği tarayıcıda görünmüyorsa
-`sw.js` içindeki `VERSION` sabitini artır ya da konsolda:
+CSS/JS değişikliği tarayıcıda görünmüyorsa `VERSION`'ı artır ya da konsolda:
 ```js
 (await navigator.serviceWorker.getRegistrations()).forEach(r => r.unregister());
 (await caches.keys()).forEach(k => caches.delete(k));

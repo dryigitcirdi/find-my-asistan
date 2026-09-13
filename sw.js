@@ -1,5 +1,13 @@
-// Çevrimdışı çalışma. Kabuk dosyaları önbellekten, veri dosyası önce ağdan.
-const VERSION = 'asistan-panel-v26';
+// Çevrimdışı çalışma.
+//
+// Strateji: ÖNCE AĞ, sonra önbellek (kısa zaman aşımıyla).
+// Önceden "önce önbellek" idi; güncelleme yayınlandığında kullanıcı eski sürümü
+// görüyor, yeni sürüm ancak ikinci açılışta geliyordu. Panel 18 kişiyle
+// paylaşıldığı için kimse iki kez yenilemeyi düşünmez — bu yüzden ağ önce.
+// Hastane wifi'si yavaşsa zaman aşımı önbelleğe düşürür, açılış yine hızlı olur.
+const VERSION = 'asistan-panel-v27';
+const TIMEOUT = 2500;
+
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
   './styles/app.css',
@@ -21,35 +29,43 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+/** Ağı dener, TIMEOUT içinde dönmezse önbelleğe düşer */
+async function networkFirst(req) {
+  const cache = await caches.open(VERSION);
+  try {
+    const res = await Promise.race([
+      fetch(req),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('zaman aşımı')), TIMEOUT))
+    ]);
+    if (res && res.ok) cache.put(req, res.clone());
+    return res;
+  } catch {
+    const hit = await cache.match(req);
+    if (hit) return hit;
+    // Gezinme isteği ve önbellekte yoksa kabuk sayfasını ver
+    if (req.mode === 'navigate') {
+      const shell = await cache.match('./index.html');
+      if (shell) return shell;
+    }
+    throw new Error('çevrimdışı ve önbellekte yok');
+  }
+}
+
+/** İkonlar değişmez: önbellekten ver, arka planda tazele */
+async function cacheFirst(req) {
+  const cache = await caches.open(VERSION);
+  const hit = await cache.match(req);
+  if (hit) {
+    fetch(req).then((res) => { if (res && res.ok) cache.put(req, res.clone()); }).catch(() => {});
+    return hit;
+  }
+  const res = await fetch(req);
+  if (res && res.ok) cache.put(req, res.clone());
+  return res;
+}
+
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
-
-  // Nöbet verisi: önce ağ, olmazsa önbellek (güncel kalsın ama çevrimdışı da açılsın)
-  if (req.url.includes('/data/')) {
-    e.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put(req, copy));
-          return res;
-        })
-        .catch(() => caches.match(req))
-    );
-    return;
-  }
-
-  // Kabuk: önce önbellek, arka planda tazele
-  e.respondWith(
-    caches.match(req).then((hit) => {
-      const net = fetch(req).then((res) => {
-        if (res && res.ok) {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put(req, copy));
-        }
-        return res;
-      }).catch(() => hit);
-      return hit || net;
-    })
-  );
+  e.respondWith(/\.(png|svg|ico|webp)$/.test(new URL(req.url).pathname) ? cacheFirst(req) : networkFirst(req));
 });
