@@ -4,3 +4,6 @@ node_modules/
 
 # Tam isimli veri yedeği yayına çıkmaz
 data/.schedule.full.json
+
+# Senkron sırasında Drive metinlerinin indiği geçici klasör
+.sync/
