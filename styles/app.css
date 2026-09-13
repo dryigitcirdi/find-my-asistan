@@ -455,11 +455,18 @@ body {
 .cell[data-s="izinli"]      { background: repeating-linear-gradient(125deg, hsl(200 60% 62% / .3) 0 4px, transparent 4px 8px); border-color: hsl(200 60% 62% / .24); }
 .cell[data-s="rotasyon"]    { background: repeating-linear-gradient(125deg, rgba(255,255,255,.16) 0 3px, transparent 3px 7px); }
 .cell[data-s="haftaSonu"]   { background: rgba(255,255,255,.035); }
-/* Hafta içi nöbetçi: gövde mesai yeşili, üstteki şerit çıkamadığı son 2 saat */
+/* Hafta içi nöbetçi: gövde bütünüyle mesai yeşili, sarı yalnızca en üstteki şerit.
+   Gradyan durak yazımı yerine ayrı katman: hiçbir tarayıcıda alta sarı sızamaz. */
 .cell[data-s="nobetci"][data-split] {
-  background:
-    linear-gradient(180deg, hsl(34 92% 64%) 0 var(--duty-gap, 20%), transparent var(--duty-gap, 20%)),
-    linear-gradient(180deg, hsl(152 55% 52% / .42), hsl(152 55% 44% / .24));
+  background: linear-gradient(180deg, hsl(152 55% 52% / .42), hsl(152 55% 44% / .24));
+  overflow: hidden;
+}
+.cell[data-s="nobetci"][data-split]::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: var(--duty-gap, 20%);
+  background: hsl(34 92% 64%);
 }
 .cell[data-today]           { outline: 1.5px solid rgba(255,255,255,.7); outline-offset: 2px; }
 .cell[data-conflict]::after {

@@ -5,7 +5,7 @@
 // görüyor, yeni sürüm ancak ikinci açılışta geliyordu. Panel 18 kişiyle
 // paylaşıldığı için kimse iki kez yenilemeyi düşünmez — bu yüzden ağ önce.
 // Hastane wifi'si yavaşsa zaman aşımı önbelleğe düşürür, açılış yine hızlı olur.
-const VERSION = 'asistan-panel-v27';
+const VERSION = 'asistan-panel-v28';
 const TIMEOUT = 2500;
 
 const SHELL = [

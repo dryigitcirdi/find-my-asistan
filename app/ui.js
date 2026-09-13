@@ -368,7 +368,7 @@ function weekCardHTML(db, hospitalId, anchor, opts, label, today, showLegend) {
       }).join('')}
       ${showLegend ? `<div class="legend">
         <b><i style="background:hsl(152 55% 50% / .4)"></i>Mesaide</b>
-        <b><i style="background:linear-gradient(180deg,hsl(34 92% 64%) 0 ${gap}%,hsl(152 55% 50% / .42) ${gap}%)"></i>Nöbetçi · ${wd0.dutyLeave}’da çıkar</b>
+        <b><i style="background:linear-gradient(180deg,hsl(34 92% 64%) ${gap}%,hsl(152 55% 50% / .42) ${gap}%)"></i>Nöbetçi · ${wd0.dutyLeave}’da çıkar</b>
         <b><i style="background:linear-gradient(180deg,hsl(353 82% 60%),hsl(347 78% 50%))"></i>Nöbet ertesi · yok</b>
         <b><i style="background:repeating-linear-gradient(125deg,hsl(200 60% 62% / .5) 0 4px,transparent 4px 8px)"></i>Yıllık izin</b>
         <b><i style="background:repeating-linear-gradient(125deg,rgba(255,255,255,.25) 0 3px,transparent 3px 7px)"></i>Rotasyonda</b>
