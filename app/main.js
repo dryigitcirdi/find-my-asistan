@@ -145,29 +145,67 @@ function stopTicking() {
 }
 
 /* ---- Başlat ---- */
-(async function boot() {
-  try {
-    await load();
-  } catch (err) {
-    dismissLaunch();
-    document.querySelector('.shell').innerHTML =
-      `<div class="card empty-state"><p class="eyebrow">Hata</p><p>${err.message}</p>
-       <p style="font-size:12px;margin-top:12px">Sayfayı bir sunucu üzerinden açman gerekiyor
-       (<code>node serve.js</code>), doğrudan dosya olarak değil.</p></div>`;
+/**
+ * Açılış çökerse bir kez kendini onar: önbelleği boşalt, service worker'ı kaldır,
+ * yeniden yükle. Eski kabuk dosyalarıyla yeni kodun karışması (HTML eski, JS yeni)
+ * uygulamayı açılış ekranında kilitliyordu. İkinci denemede de olursa hatayı göster.
+ */
+async function kendiniOnar(err) {
+  const anahtar = 'asistan-panel/onarildi';
+  let denendi = false;
+  try { denendi = sessionStorage.getItem(anahtar) === '1'; } catch { /* gizli sekme */ }
+
+  if (!denendi) {
+    try { sessionStorage.setItem(anahtar, '1'); } catch { /* yoksay */ }
+    try {
+      for (const k of await caches.keys()) await caches.delete(k);
+      for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+    } catch { /* desteklenmiyorsa yoksay */ }
+    location.reload();
     return;
   }
 
-  document.getElementById('btn-grid').addEventListener('click', goHospitals);
-  document.getElementById('btn-grid-2').addEventListener('click', goHospitals);
-  document.getElementById('make-home').addEventListener('click', (e) => {
-    update({ homeHospitalId: e.currentTarget.dataset.id });
-    UI.setActivePage(panels, active, e.currentTarget.dataset.id);
-  });
-  document.getElementById('btn-settings').addEventListener('click', openSettings);
-
-  const last = params.get('h') || settings().homeHospitalId;
-  if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
   dismissLaunch();
+  const shell = document.querySelector('.shell');
+  if (shell) {
+    shell.innerHTML = `<div class="card empty-state">
+      <p class="eyebrow">Açılamadı</p>
+      <p>${(err && err.message) || 'Bilinmeyen hata'}</p>
+      <p style="font-size:12px;margin-top:12px;color:var(--text-3)">
+        İnternet bağlantını kontrol edip tekrar dene. Sürerse uygulamayı tamamen kapatıp aç.
+      </p></div>`;
+  }
+  document.querySelectorAll('.screen').forEach((x) => x.removeAttribute('data-active'));
+  const picker = document.querySelector('[data-screen="hospitals"]');
+  if (picker) picker.setAttribute('data-active', '');
+}
+
+(async function boot() {
+  try {
+    await load();
+
+    // Öğe yoksa sessizce geç: önbellekte eski bir index.html kalmışsa
+    // tek bir eksik düğme tüm uygulamayı düşürmemeli.
+    const on = (id, fn) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', fn);
+    };
+    on('btn-grid', goHospitals);
+    on('btn-grid-2', goHospitals);
+    on('btn-settings', openSettings);
+    on('make-home', (e) => {
+      update({ homeHospitalId: e.currentTarget.dataset.id });
+      UI.setActivePage(panels, active, e.currentTarget.dataset.id);
+    });
+
+    const last = params.get('h') || settings().homeHospitalId;
+    if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
+  } catch (err) {
+    await kendiniOnar(err);
+    return;
+  }
+  dismissLaunch();
+  try { sessionStorage.removeItem('asistan-panel/onarildi'); } catch { /* yoksay */ }
 
   // Sekmeye geri dönüldüğünde tarih/saat tazelensin, konum korunsun
   let lastDate = today();
