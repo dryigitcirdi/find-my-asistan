@@ -32,6 +32,20 @@ sadeleştirilmiş (tek halka + daha büyük kemik). İkonun iki hali kasıtlı o
 - Arayüz dili Türkçe.
 - Tıbbi klişe görsel yok (stok doktor, mavi-yeşil hastane teması vb.).
 
+## Haftalık bardaki renk dili
+Kutu = bir günün mesaisi, dikey olarak 08:00 (alt) → 18:00 (üst).
+- **Düz yeşil** — tam gün mesaide
+- **Yeşil + üstte sarı şerit** — o gün burada ama nöbet çıkışı nedeniyle erken gidiyor.
+  Şeridin yüksekliği çıkamadığı sürenin oranı (`--duty-gap`, 08–18 / 16:00 → %20),
+  mesai saatleri değişirse kendiliğinden uyar.
+- **Düz sarı** — hafta sonu nöbeti: rutin mesai yok, tüm gün nöbette
+- **Kırmızı** — o gün yok (nöbet ertesi). Kliniği en çok etkileyen durum, en uyarıcı renk.
+- Taralı — yıllık izin / dış rotasyon
+
+Nöbetin hangi hastanede olduğu barda **gösterilmez**: gözlemci için önemli olan
+"burada mı, kaçta çıkıyor". Nöbet yeri asistan kartının metninde yazıyor.
+Eskiden sarı çerçeve + gri iç kullanılıyordu; "o gün yok" izlenimi verdiği için kaldırıldı.
+
 ## Ekran düzeni — neden böyle
 Panel, **asistan kartıyla başlar**. Kullanıcılar (18 hoca) kendi hastanesinin tek-iki
 asistanını görmek için açıyor; toplam sayaç onları aşağı itiyordu. Üstteki büyük sayaç

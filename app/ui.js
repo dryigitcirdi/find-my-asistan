@@ -324,6 +324,11 @@ export function panelHTML(db, hospitalId, date, opts) {
 
 /** Tek bir haftanın barı. `today` bugünü işaretlemek için (gelecek haftada eşleşmez). */
 function weekCardHTML(db, hospitalId, anchor, opts, label, today, showLegend) {
+  const wd0 = db.meta.workday;
+  // Sarı şeridin yüksekliği = çıkamadığı sürenin mesaiye oranı (08–18 / 16:00 -> %20)
+  const gap = Math.round(
+    ((S.toMinutes(wd0.end) - S.toMinutes(wd0.dutyLeave)) /
+     (S.toMinutes(wd0.end) - S.toMinutes(wd0.start))) * 100);
   const wm = S.weekMatrix(db, hospitalId, anchor, opts);
   if (!wm.rows.length) return '';
   const bas = S.parseIso(wm.days[0]).getDate();
@@ -342,17 +347,28 @@ function weekCardHTML(db, hospitalId, anchor, opts, label, today, showLegend) {
         return `<div class="week-row">
           <span class="week-name" style="color:hsl(${r.hue}deg 70% 78%)">${esc(r.short)}</span>
           <div class="week-cells">
-            ${row.cells.map((c, i) => `<i class="cell" style="animation-delay:${i * 28}ms"
-                data-s="${c.status.id}" ${c.duty && !c.dutyHere ? 'data-away' : ''}
+            ${row.cells.map((c, i) => {
+              // Hafta içi nöbetçi: gün boyu burada, yalnızca son 2 saat yok.
+              // Hafta sonu: rutin mesai yok — buradaki nöbetçi tüm gün burada,
+              // nöbeti başka hastanedeyse burada hiç yok.
+              let durum = c.status.id, split = false;
+              if (durum === 'nobetci') {
+                if (!c.weekend) split = true;
+                else if (!c.dutyHere) durum = 'haftaSonu';
+              }
+              const ipucu = `${S.formatLongDate(c.date)} — ${c.status.label}` +
+                (split ? ` · ${db.meta.workday.dutyLeave}’da çıkar` : '');
+              return `<i class="cell" style="animation-delay:${i * 28}ms${split ? `;--duty-gap:${gap}%` : ''}"
+                data-s="${durum}" ${split ? 'data-split' : ''}
                 ${c.date === today ? 'data-today' : ''} ${c.conflict ? 'data-conflict' : ''}
-                title="${esc(S.formatLongDate(c.date))} — ${esc(c.status.label)}"></i>`).join('')}
+                title="${esc(ipucu)}"></i>`;
+            }).join('')}
           </div>
         </div>`;
       }).join('')}
       ${showLegend ? `<div class="legend">
-        <b><i style="background:linear-gradient(180deg,hsl(34 92% 62%),hsl(24 88% 54%))"></i>Nöbetçi</b>
-        <b><i style="background:hsl(34 92% 62% / .2);box-shadow:inset 0 0 0 1.5px hsl(34 92% 62% / .7)"></i>Başka hastanede nöbet</b>
         <b><i style="background:hsl(152 55% 50% / .4)"></i>Mesaide</b>
+        <b><i style="background:linear-gradient(180deg,hsl(34 92% 64%) 0 ${gap}%,hsl(152 55% 50% / .42) ${gap}%)"></i>Nöbetçi · ${wd0.dutyLeave}’da çıkar</b>
         <b><i style="background:linear-gradient(180deg,hsl(353 82% 60%),hsl(347 78% 50%))"></i>Nöbet ertesi · yok</b>
         <b><i style="background:repeating-linear-gradient(125deg,hsl(200 60% 62% / .5) 0 4px,transparent 4px 8px)"></i>Yıllık izin</b>
         <b><i style="background:repeating-linear-gradient(125deg,rgba(255,255,255,.25) 0 3px,transparent 3px 7px)"></i>Rotasyonda</b>

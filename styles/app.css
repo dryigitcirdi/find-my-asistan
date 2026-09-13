@@ -455,7 +455,12 @@ body {
 .cell[data-s="izinli"]      { background: repeating-linear-gradient(125deg, hsl(200 60% 62% / .3) 0 4px, transparent 4px 8px); border-color: hsl(200 60% 62% / .24); }
 .cell[data-s="rotasyon"]    { background: repeating-linear-gradient(125deg, rgba(255,255,255,.16) 0 3px, transparent 3px 7px); }
 .cell[data-s="haftaSonu"]   { background: rgba(255,255,255,.035); }
-.cell[data-away]            { box-shadow: inset 0 0 0 1.5px hsl(34 92% 62% / .7); background: hsl(34 92% 62% / .12); }
+/* Hafta içi nöbetçi: gövde mesai yeşili, üstteki şerit çıkamadığı son 2 saat */
+.cell[data-s="nobetci"][data-split] {
+  background:
+    linear-gradient(180deg, hsl(34 92% 64%) 0 var(--duty-gap, 20%), transparent var(--duty-gap, 20%)),
+    linear-gradient(180deg, hsl(152 55% 52% / .42), hsl(152 55% 44% / .24));
+}
 .cell[data-today]           { outline: 1.5px solid rgba(255,255,255,.7); outline-offset: 2px; }
 .cell[data-conflict]::after {
   content: ''; position: absolute; right: 3px; top: 3px;
