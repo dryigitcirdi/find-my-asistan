@@ -3,7 +3,10 @@
 > Bu dosya **oturum kesilirse kaldığı yerden devam** edebilmek için var.
 > Yeni bir Claude Code oturumu açıldığında önce `CLAUDE.md` + bu dosya okunur.
 
-## Durum: FAZ 7 / 7 — GitHub tarafı bekleniyor
+## Durum: CANLI — https://dryigitcirdi.github.io/find-my-asistan/
+
+Yayına alındı 13.09.2026. Güncelleme: `git push` yeterli (Pages otomatik derler).
+`sw.js` içindeki `VERSION` artırılmazsa telefonlardaki önbellek eskide kalır.
 
 | # | Faz | Durum |
 |---|-----|-------|
@@ -16,9 +19,8 @@
 | 7 | Yayına alma (GitHub Pages / Vercel) + iPhone kısayolu | ⬜ Bekliyor |
 
 ## Yapılacaklar (sıradaki)
-- [ ] **Yayın** — GitHub Pages + noindex, tam isimlerle. Depo adı `find-my-asistan`.
-      `DEPLOY.md` içindeki 3 adım (depo oluştur → dağıtım anahtarını ekle → Pages'i aç)
-      kullanıcıda. Sonrasında: `git -C . push -u origin main`
+- [x] ~~Yayın~~ — **canlı**. Depo `dryigitcirdi/find-my-asistan`, dağıtım anahtarı ekli,
+      Pages `main`/`(root)` üzerinden yayında.
 - [x] ~~Kadro tablosu bekleniyor~~ — **çözüldü**: kadro rotasyon takviminin renk kodlarından
       okunuyor, 101 ay için tanımlı (2021-12 → 2030-04). `tools/import-rotation.js` ile
       yeniden üretilebilir. Detay ve tuzaklar `CLAUDE.md` içinde.

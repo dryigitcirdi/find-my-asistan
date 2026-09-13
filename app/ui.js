@@ -161,8 +161,9 @@ function subtitle(db, p, hospitalId) {
     bits.push(`${db.rotationNames[p.rotation.name] || p.rotation.name} rotasyonunda`);
   }
   if (p.visiting) {
+    // Rotasyondaki asistanın bu ay hiçbir kadrosu yok; "kadrosu başka hastane" demek yanlış olur
     const home = db.hospitals.find((h) => h.id === p.home);
-    bits.push(`kadrosu ${home ? home.name : 'başka hastane'}`);
+    if (home) bits.push(`kadrosu ${home.name}`);
   }
   return bits;
 }
