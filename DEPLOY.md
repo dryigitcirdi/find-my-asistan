@@ -15,21 +15,29 @@ https://github.com/new adresinde:
 `https://github.com/dryigitcirdi/find-my-asistan/settings/keys/new` adresinde:
 - **Title:** `asistan-panel deploy`
 - **Key:** aşağıdaki satırı olduğu gibi yapıştır
-- **Allow write access** kutusunu **işaretle**
+- **Allow write access** kutusunu **işaretle** (işaretlenmezse push reddedilir)
 
 ```
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEdPz0kfq8PwFihMyTHjgWYnv/9ywWJgP6LisdF4b0vp asistan-panel deploy key
 ```
 
-### 3. GitHub Pages'i aç
+### 3. Önce push, sonra Pages
+**Sıra önemli.** Depo boşken `main` dalı yoktur ve Pages ayarındaki Branch listesinde
+seçilecek bir şey çıkmaz. Önce kod gönderilir:
+
+```bash
+git -C /Users/yigit/Desktop/cod/asistan-panel push -u origin main
+```
+
+### 4. GitHub Pages'i aç
 `https://github.com/dryigitcirdi/find-my-asistan/settings/pages` adresinde:
 - **Source:** `Deploy from a branch`
 - **Branch:** `main` / `(root)` → Save
 
-Bu üçü bitince bana "yayınla" de, gerisini ben hallederim:
-```bash
-git -C /Users/yigit/Desktop/cod/asistan-panel push -u origin main
-```
+İlk yayın birkaç dakika sürer. Adres: **https://dryigitcirdi.github.io/find-my-asistan/**
+
+> Depo sayfasındaki **Settings**, üstteki yatay sekme şeridinin en sağındaki dişli ikonlu
+> sekmedir (profil ayarları değil). Pencere darsa şeridin sağ ucundaki `⋯` menüsüne girer.
 
 ---
 
