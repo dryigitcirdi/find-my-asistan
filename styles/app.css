@@ -298,7 +298,8 @@ body {
 }
 .icon-btn {
   display: inline-grid; place-items: center;
-  width: 38px; height: 38px; flex: none;
+  /* 44px: Apple'ın önerdiği en küçük dokunma hedefi */
+  width: 44px; height: 44px; flex: none;
   border-radius: 12px; border: 1px solid var(--hairline);
   background: rgba(255,255,255,.05); color: var(--text);
   cursor: pointer;
@@ -649,12 +650,21 @@ body {
 }
 
 .pager-head {
+  position: relative; z-index: 2;   /* hiçbir katman üstüne binmesin */
   flex: none;
-  display: flex; align-items: center; gap: 12px;
-  padding: max(env(safe-area-inset-top), 12px) var(--pad) 0;
+  display: flex; align-items: center; gap: 8px;
+  padding: calc(max(env(safe-area-inset-top), 10px) + 4px) var(--pad) 0;
   max-width: var(--maxw); width: 100%; margin: 0 auto;
 }
-.pager-id { flex: 1; min-width: 0; text-align: center; }
+.pager-id {
+  flex: 1; min-width: 0; text-align: center;
+  font: inherit; color: inherit; background: none; border: 0;
+  padding: 6px 4px; border-radius: 14px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .3s var(--ease);
+}
+.pager-id:active { background: rgba(255,255,255,.06); }
+.pager-id .eyebrow { display: block; }
 .pager-id .eyebrow { font-size: 9.5px; }
 .pager-id h1 {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;

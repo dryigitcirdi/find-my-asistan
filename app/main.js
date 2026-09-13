@@ -8,6 +8,12 @@ import * as Sheet from './sheet.js';
 const params = new URLSearchParams(location.search);
 const BOOT_AT = performance.now();
 
+// Emniyet: bir şey ters giderse açılış ekranı ekranı kilitlemesin
+setTimeout(() => {
+  const el = document.getElementById('launch');
+  if (el && !el.hidden) { el.setAttribute('data-out', ''); el.hidden = true; }
+}, 4000);
+
 /** Açılış ekranı: marka en az bu kadar görünsün, sonra çözülsün */
 function dismissLaunch() {
   const el = document.getElementById('launch');
@@ -152,6 +158,7 @@ function stopTicking() {
   }
 
   document.getElementById('btn-grid').addEventListener('click', goHospitals);
+  document.getElementById('btn-grid-2').addEventListener('click', goHospitals);
   document.getElementById('make-home').addEventListener('click', (e) => {
     update({ homeHospitalId: e.currentTarget.dataset.id });
     UI.setActivePage(panels, active, e.currentTarget.dataset.id);
