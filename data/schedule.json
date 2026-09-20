@@ -5,6 +5,7 @@
     "org": "Acıbadem Üniversitesi · Ortopedi",
     "source": "Drive › Üniversite › Asistan takip",
     "coverage": [
+      "2026-01",
       "2026-08",
       "2026-09"
     ],
@@ -96,6 +97,11 @@
     "TEZ": "Tez dönemi"
   },
   "duties": [
+    {
+      "d": "2026-01-01",
+      "r": "tky",
+      "h": "altunizade"
+    },
     {
       "d": "2026-08-01",
       "r": "ma",
@@ -483,6 +489,10 @@
     }
   ],
   "postCall": [
+    {
+      "d": "2026-01-02",
+      "r": "tky"
+    },
     {
       "d": "2026-08-03",
       "r": "ma"
