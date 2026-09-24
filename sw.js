@@ -11,7 +11,7 @@ const TIMEOUT = 2500;
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
   './styles/app.css',
-  './app/main.js', './app/ui.js', './app/sheet.js',
+  './app/main.js', './app/ui.js', './app/sheet.js', './app/config.js',
   './app/schedule.js', './app/data.js', './app/store.js',
   './data/schedule.json',
   './assets/icon-180.png', './assets/icon-192.png', './assets/icon-512.png'

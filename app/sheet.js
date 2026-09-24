@@ -132,6 +132,15 @@ export function openSettings(db, date, onSaved) {
     </div>
 
     <div class="set">
+      <p class="eyebrow">Kullanan kişi</p>
+      <div class="set-row">
+        <label>Bu paneli kim kullanıyor<small>Kimlerin kullandığını görebilmek için</small></label>
+        <input type="text" data-kullanan value="${esc(s.kullanan || '')}"
+               placeholder="Ad Soyad" maxlength="60" autocapitalize="words">
+      </div>
+    </div>
+
+    <div class="set">
       <p class="eyebrow">Ana hastane</p>
       <div class="set-row">
         <label>Uygulama hep burada açılsın<small>Yana kaydırmak bunu değiştirmez</small></label>
@@ -160,6 +169,12 @@ export function openSettings(db, date, onSaved) {
 
   sheet.querySelector('[data-home]').addEventListener('change', (e) =>
     update({ homeHospitalId: e.currentTarget.value }));
+
+  const kul = sheet.querySelector('[data-kullanan]');
+  if (kul) kul.addEventListener('change', () => {
+    const ad = kul.value.trim().replace(/\s+/g, ' ');
+    if (ad.length >= 2) update({ kullanan: ad });
+  });
 
   sheet.querySelector('#btn-refresh').addEventListener('click', async (e) => {
     e.currentTarget.textContent = 'Yenileniyor…';

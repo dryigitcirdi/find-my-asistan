@@ -3,7 +3,10 @@
 // (Degistirilebilse bile localStorage'da kalirdi, yani yalnizca o telefonu etkilerdi.)
 const KEY = 'asistan-panel/v1';
 
-const DEFAULTS = { homeHospitalId: null };
+const DEFAULTS = {
+  homeHospitalId: null,
+  kullanan: null        // paneli kullanan kişinin adı — kim kullanıyor görünürlüğü için
+};
 
 function read() {
   try {

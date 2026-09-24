@@ -4,9 +4,11 @@ import { settings, update } from './store.js';
 import * as S from './schedule.js';
 import * as UI from './ui.js';
 import * as Sheet from './sheet.js';
+import { KULLANIM_KAYDI } from './config.js';
 
 const params = new URLSearchParams(location.search);
 const BOOT_AT = performance.now();
+let surumNo = '';
 
 // Emniyet: bir şey ters giderse açılış ekranı ekranı kilitlemesin
 setTimeout(() => {
@@ -39,6 +41,56 @@ let timer = null;
 let onDayScreen = false;
 
 const pager = () => document.getElementById('pager');
+
+/* ---------------- Kim kullanıyor ---------------- */
+
+/**
+ * Kullanım kaydı — kısıtlama değil görünürlük.
+ * Yanıtı okumaya gerek yok (no-cors), servis kapalıysa panel etkilenmez.
+ */
+function kullanimBildir() {
+  const ad = (settings().kullanan || '').trim();
+  if (!ad || !KULLANIM_KAYDI) return;
+  // Aynı açılışta bir kez, ayrıca saatte birden sık gönderme
+  const anahtar = 'asistan-panel/son-bildirim';
+  try {
+    const son = Number(localStorage.getItem(anahtar) || 0);
+    if (Date.now() - son < 60 * 60 * 1000) return;
+    localStorage.setItem(anahtar, String(Date.now()));
+  } catch { /* gizli sekme: yine de gönder */ }
+
+  const h = db().hospitals.find((x) => x.id === settings().homeHospitalId);
+  const govde = JSON.stringify({
+    ad,
+    hastane: h ? h.name : '',
+    surum: surumNo || '',
+    cihaz: navigator.platform || ''
+  });
+  fetch(KULLANIM_KAYDI, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: govde,
+    keepalive: true
+  }).catch(() => { /* kayıt tutulamadıysa sessizce geç */ });
+}
+
+/** İsim sorulmadıysa önce onu sor; kaydedince devam et */
+function isimSor(devam) {
+  UI.showScreen('who');
+  const form = document.getElementById('who-form');
+  const alan = document.getElementById('who-name');
+  if (!form || !alan) { devam(); return; }
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const ad = alan.value.trim().replace(/\s+/g, ' ');
+    if (ad.length < 2) { alan.focus(); return; }
+    update({ kullanan: ad });
+    devam();
+    kullanimBildir();
+  };
+  setTimeout(() => { try { alan.focus(); } catch { /* yoksay */ } }, 500);
+}
 
 /* ---------------- Hastane seçim ekranı ---------------- */
 
@@ -197,8 +249,11 @@ async function kendiniOnar(err) {
     on('btn-grid-2', goHospitals);
     on('btn-settings', openSettings);
 
-    const last = params.get('h') || settings().homeHospitalId;
-    if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
+    const ac = () => {
+      const last = params.get('h') || settings().homeHospitalId;
+      if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
+    };
+    if (settings().kullanan) { ac(); kullanimBildir(); } else { isimSor(ac); }
   } catch (err) {
     await kendiniOnar(err);
     return;
@@ -222,7 +277,10 @@ async function kendiniOnar(err) {
     .then((r) => r.text())
     .then((t) => {
       const v = (t.match(/asistan-panel-v(\d+)/) || [])[1];
-      if (v) document.querySelectorAll('[data-version]').forEach((n) => { n.textContent = `· sürüm ${v}`; });
+      if (v) {
+        surumNo = v;
+        document.querySelectorAll('[data-version]').forEach((n) => { n.textContent = `· sürüm ${v}`; });
+      }
     })
     .catch(() => {});
 

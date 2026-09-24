@@ -857,3 +857,41 @@ body {
 .set-note {
   margin: 12px 2px 0; font-size: 12px; line-height: 1.5; color: var(--text-3);
 }
+
+/* ---------- Kim kullanıyor ekranı ---------- */
+[data-screen="who"] { padding-top: 6vh; }
+.who-form { display: flex; flex-direction: column; gap: 11px; margin-top: 26px; }
+.who-form input {
+  font: inherit; font-size: 16px;   /* 16px altında iOS sayfayı yakınlaştırıyor */
+  color: var(--text);
+  background: rgba(255,255,255,.055);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-sm);
+  padding: 15px 16px;
+  -webkit-appearance: none;
+  transition: border-color .3s var(--ease), background .3s var(--ease);
+}
+.who-form input::placeholder { color: var(--text-3); }
+.who-form input:focus {
+  outline: none;
+  border-color: hsl(calc(var(--h1) * 1deg) 80% 66% / .5);
+  background: rgba(255,255,255,.08);
+}
+.btn-primary {
+  font: inherit; font-size: 15px; font-weight: 600;
+  color: #0b0c12;
+  background: linear-gradient(180deg, #f4f6fb, #d9dde8);
+  border: 0; border-radius: var(--r-sm);
+  padding: 15px; cursor: pointer;
+  transition: transform .3s var(--spring), opacity .3s var(--ease);
+}
+.btn-primary:active { transform: scale(.98); }
+.who-note {
+  margin: 20px 2px 0; font-size: 12.5px; line-height: 1.55; color: var(--text-3);
+}
+.set-row input[type="text"] {
+  font: inherit; font-size: 13.5px; text-align: right;
+  color: var(--text); background: rgba(255,255,255,.07);
+  border: 1px solid var(--hairline-strong); border-radius: 9px;
+  padding: 7px 9px; max-width: 52%; -webkit-appearance: none;
+}

@@ -56,6 +56,22 @@ bir satırdı.
 hem yatay kaydırma bunu kullanır — sıra ikisinde aynı olmalı, yoksa noktalar şaşırtıyor.
 Ana hastane kartında kısaltma yerine "ANA" yazar.
 
+## Kim kullanıyor kaydı
+Panel herkese açık, şifre yok, kimse engellenmiyor — amaç kısıtlamak değil görünürlük.
+İlk açılışta ad sorulur (`data-screen="who"`), sonra her açılışta (saatte en fazla bir kez)
+Apps Script web uygulamasına gönderilir. Kayıtlar Drive'daki
+**"Find My Asistan — Kullanım Kaydı"** tablosunda: `Kullananlar` (kişi başına tek satır)
+ve `Açılışlar` (her açılış).
+
+- Uç nokta `app/config.js` içinde; sync görevi buraya dokunmaz.
+- Gönderim `mode:'no-cors'`, yanıt okunmaz. Servis kapalıysa panel normal çalışır.
+- Script kaynağı `usage-log/`. Güncellemek için:
+  `cd usage-log && npx @google/clasp@3.0.6-alpha push && ... create-deployment`
+- **Not:** Apps Script, API'den oluşturulan dağıtımlarda "Herkes" erişimini kendiliğinden
+  uygulamıyor; sahibinin bir kez editörden Deploy etmesi gerekiyor.
+- Uç nokta herkese açık olduğu için teorik olarak sahte kayıt gönderilebilir; risk düşük,
+  tabloda göze çarpar ve silinir.
+
 ## Ayarlarda ne var, ne yok
 Değiştirilebilen tek şey **ana hastane**. Mesai saatleri, kadro, rotasyon ve asistan
 sorumluları kaldırıldı: hepsi Drive'dan okunuyor ve herkes aynı veriyi görmeli.

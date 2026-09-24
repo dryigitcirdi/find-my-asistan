@@ -7,3 +7,6 @@ data/.schedule.full.json
 
 # Senkron sırasında Drive metinlerinin indiği geçici klasör
 .sync/
+
+# clasp yerel proje bağlantısı
+usage-log/.clasp.json
