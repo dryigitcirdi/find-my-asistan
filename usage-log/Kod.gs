@@ -5,7 +5,10 @@
  * Giriş kaydı TUTULMAZ: kim ne zaman açtı, kaç kez açtı yazılmaz.
  * Kişi başına tek satır vardır; aynı kişi tekrar bildirirse satırı güncellenir.
  */
-const SAYFA = 'Kullananlar';
+// Drive › Asistan Takip Programı › "Kullanıcılar"
+// Script kendi oluşturduğu tabloya değil, buraya yazar.
+const TABLO_ID = '1ywW-nBeF2FnZhSDCpLrbKBlsX9gr5j1m_ZsJHjCgc1M';
+const BASLIKLAR = ['Ad', 'Hastane', 'Eklendiği tarih'];
 
 function doPost(e) {
   try {
@@ -35,19 +38,20 @@ function kaydet(v) {
   if (ad.length < 2) return;
   const hastane = String(v.hastane || '').trim().slice(0, 40);
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
   const lock = LockService.getScriptLock();
   try { lock.waitLock(5000); } catch (err) { /* kilit alınamazsa yine de dene */ }
 
   try {
-    let s = ss.getSheetByName(SAYFA);
-    if (!s) {
-      s = ss.insertSheet(SAYFA);
-      s.appendRow(['Ad', 'Hastane', 'Eklendiği tarih']);
-      s.getRange(1, 1, 1, 3).setFontWeight('bold');
+    const s = SpreadsheetApp.openById(TABLO_ID).getSheets()[0];
+
+    // Tablo boşsa başlıkları kur
+    if (s.getLastRow() === 0) {
+      s.appendRow(BASLIKLAR);
+      s.getRange(1, 1, 1, BASLIKLAR.length).setFontWeight('bold');
       s.setFrozenRows(1);
       s.setColumnWidth(1, 220);
       s.setColumnWidth(2, 140);
+      s.setColumnWidth(3, 160);
     }
 
     const veriler = s.getDataRange().getValues();

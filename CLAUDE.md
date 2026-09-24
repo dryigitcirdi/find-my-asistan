@@ -62,9 +62,15 @@ Panel herkese açık, şifre yok, kimse engellenmiyor — amaç kısıtlamak de�
 
 **Giriş kaydı tutulmaz** — kim ne zaman açtı, kaç kez açtı yazılmaz. Kullanıcının açık
 isteği bu. Gönderim yalnızca ad+hastane ilk kez belirlendiğinde ya da değiştiğinde olur
-(`localStorage['asistan-panel/bildirildi']` imzasıyla). Sonuç: Drive'daki
-**"Find My Asistan — Kullanım Kaydı"** tablosunda kişi başına tek satır —
+(`localStorage['asistan-panel/bildirildi']` imzasıyla). Sonuç: kişi başına tek satır —
 Ad | Hastane | Eklendiği tarih.
+
+**Kayıt tablosu:** Drive › Asistan Takip Programı › **Kullanıcılar**
+(`1ywW-nBeF2FnZhSDCpLrbKBlsX9gr5j1m_ZsJHjCgc1M`), ilk sayfasına yazılır.
+
+⚠️ **Script'in kendisi başka bir dosyanın içinde yaşıyor:** clasp `create-script --type sheets`
+ile kurulduğu için "Find My Asistan — Kullanım Kaydı" adlı tabloya bağlı. O tablo artık
+veri tutmuyor ama **silinirse script de silinir**. Veriler ayrı dosyada (Kullanıcılar).
 
 - Uç nokta `app/config.js` içinde; sync görevi buraya dokunmaz.
 - Gönderim `mode:'no-cors'`, yanıt okunmaz. Servis kapalıysa panel normal çalışır.
