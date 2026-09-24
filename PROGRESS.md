@@ -68,6 +68,24 @@ Test için tarih/hastane zorlama: `?d=2026-09-16&h=maslak`
 - Anonimleştirme gerekmiyor: panel 18 hoca + 6 asistan tarafından kullanılacak,
   isimler açık kalacak. `tools/anonymize.js` yine de duruyor.
 
+## v11 — kullanan kişiler listesi (24.09.2026)
+Panel yayıldı, kimlerin kullandığı bilinmiyordu. Şifre/kısıtlama istenmedi — yalnızca görünürlük.
+
+- İlk açılışta ad soruluyor → hastane → normal açılış. Ad+hastane **bir kez** gönderiliyor.
+- **Giriş kaydı tutulmuyor** (kullanıcının açık isteği): kim ne zaman açtı yazılmıyor.
+- Kayıt yeri: Drive › Asistan Takip Programı › **Kullanıcılar**
+  (`1ywW-nBeF2FnZhSDCpLrbKBlsX9gr5j1m_ZsJHjCgc1M`) — Ad | Hastane | Eklendiği tarih.
+- Servis: Apps Script web uygulaması, kaynağı `usage-log/`, clasp ile yönetiliyor.
+  Script `KOD — SİLMEYİN (...)` adlı tablonun içinde yaşıyor, o dosya silinmemeli.
+- Uçtan uca doğrulandı: kayıt düşüyor, aynı kişi tekrar gönderince yeni satır açılmıyor
+  (Türkçe büyük/küçük harf duyarsız), yalnızca hastanesi güncelleniyor.
+- Mevcut kullanıcılar uygulamayı silmeyecek: adı olmayan herkes bir sonraki açılışta
+  isim ekranını görüyor, sonra doğrudan kendi hastanesine gidiyor.
+
+### Not
+Apps Script ~3-4 sn'de yanıt veriyor; gönderim başarısızsa imza kaydedilmediği için
+bir sonraki açılışta yeniden deneniyor.
+
 ## v10 — yayında ve kullanımda (13.09.2026)
 Link 18 hocayla paylaşıldı. Sürüm 36.
 
