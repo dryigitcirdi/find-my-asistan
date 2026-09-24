@@ -68,9 +68,15 @@ Ad | Hastane | Eklendiği tarih.
 **Kayıt tablosu:** Drive › Asistan Takip Programı › **Kullanıcılar**
 (`1ywW-nBeF2FnZhSDCpLrbKBlsX9gr5j1m_ZsJHjCgc1M`), ilk sayfasına yazılır.
 
-⚠️ **Script'in kendisi başka bir dosyanın içinde yaşıyor:** clasp `create-script --type sheets`
-ile kurulduğu için "Find My Asistan — Kullanım Kaydı" adlı tabloya bağlı. O tablo artık
-veri tutmuyor ama **silinirse script de silinir**. Veriler ayrı dosyada (Kullanıcılar).
+⚠️ **Script'in kendisi bir tablonun içinde yaşıyor:** clasp `create-script --type sheets`
+ile kurulduğu için bir Sheets dosyasına bağlı. O dosya artık veri tutmuyor ama
+**silinirse script de silinir**. Kazara silinmesin diye aynı klasöre taşındı ve adı
+**"KOD — SİLMEYİN (Find My Asistan kayıt servisi)"** yapıldı
+(`145eCjwdqu6Tm6_Xoc0TYdoflXse9g9bgjB-fwn-X-KY`).
+
+Klasörün son hali — Drive › Asistan Takip Programı:
+- `Kullanıcılar` — veriler buraya yazılır
+- `KOD — SİLMEYİN (...)` — script bunun içinde, boş durur
 
 - Uç nokta `app/config.js` içinde; sync görevi buraya dokunmaz.
 - Gönderim `mode:'no-cors'`, yanıt okunmaz. Servis kapalıysa panel normal çalışır.
