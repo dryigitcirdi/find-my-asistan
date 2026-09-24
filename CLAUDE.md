@@ -56,12 +56,15 @@ bir satırdı.
 hem yatay kaydırma bunu kullanır — sıra ikisinde aynı olmalı, yoksa noktalar şaşırtıyor.
 Ana hastane kartında kısaltma yerine "ANA" yazar.
 
-## Kim kullanıyor kaydı
+## Kim kullanıyor listesi
 Panel herkese açık, şifre yok, kimse engellenmiyor — amaç kısıtlamak değil görünürlük.
-İlk açılışta ad sorulur (`data-screen="who"`), sonra her açılışta (saatte en fazla bir kez)
-Apps Script web uygulamasına gönderilir. Kayıtlar Drive'daki
-**"Find My Asistan — Kullanım Kaydı"** tablosunda: `Kullananlar` (kişi başına tek satır)
-ve `Açılışlar` (her açılış).
+İlk açılışta ad sorulur (`data-screen="who"`), ardından hastane seçilir, sonra normal açılır.
+
+**Giriş kaydı tutulmaz** — kim ne zaman açtı, kaç kez açtı yazılmaz. Kullanıcının açık
+isteği bu. Gönderim yalnızca ad+hastane ilk kez belirlendiğinde ya da değiştiğinde olur
+(`localStorage['asistan-panel/bildirildi']` imzasıyla). Sonuç: Drive'daki
+**"Find My Asistan — Kullanım Kaydı"** tablosunda kişi başına tek satır —
+Ad | Hastane | Eklendiği tarih.
 
 - Uç nokta `app/config.js` içinde; sync görevi buraya dokunmaz.
 - Gönderim `mode:'no-cors'`, yanıt okunmaz. Servis kapalıysa panel normal çalışır.

@@ -45,34 +45,32 @@ const pager = () => document.getElementById('pager');
 /* ---------------- Kim kullanıyor ---------------- */
 
 /**
- * Kullanım kaydı — kısıtlama değil görünürlük.
- * Yanıtı okumaya gerek yok (no-cors), servis kapalıysa panel etkilenmez.
+ * Kullanan kişiler listesine bir kez bildir.
+ * Giriş kaydı TUTULMAZ — kim ne zaman açtı yazılmaz. Yalnızca ad + hastane,
+ * ve yalnızca bunlar ilk kez belirlendiğinde ya da değiştiğinde gönderilir.
+ * Yanıt okunmaz (no-cors); servis kapalıysa panel normal çalışır.
  */
-function kullanimBildir() {
+function kullananBildir() {
   const ad = (settings().kullanan || '').trim();
-  if (!ad || !KULLANIM_KAYDI) return;
-  // Aynı açılışta bir kez, ayrıca saatte birden sık gönderme
-  const anahtar = 'asistan-panel/son-bildirim';
-  try {
-    const son = Number(localStorage.getItem(anahtar) || 0);
-    if (Date.now() - son < 60 * 60 * 1000) return;
-    localStorage.setItem(anahtar, String(Date.now()));
-  } catch { /* gizli sekme: yine de gönder */ }
+  const hid = settings().homeHospitalId;
+  if (!ad || !hid || !KULLANIM_KAYDI) return;
 
-  const h = db().hospitals.find((x) => x.id === settings().homeHospitalId);
-  const govde = JSON.stringify({
-    ad,
-    hastane: h ? h.name : '',
-    surum: surumNo || '',
-    cihaz: navigator.platform || ''
-  });
+  const h = db().hospitals.find((x) => x.id === hid);
+  const imza = `${ad}|${hid}`;
+  const anahtar = 'asistan-panel/bildirildi';
+  try {
+    if (localStorage.getItem(anahtar) === imza) return;   // değişmediyse tekrar gönderme
+  } catch { /* gizli sekme */ }
+
   fetch(KULLANIM_KAYDI, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: govde,
+    body: JSON.stringify({ ad, hastane: h ? h.name : '' }),
     keepalive: true
-  }).catch(() => { /* kayıt tutulamadıysa sessizce geç */ });
+  })
+    .then(() => { try { localStorage.setItem(anahtar, imza); } catch { /* yoksay */ } })
+    .catch(() => { /* ulaşılamadıysa bir dahaki açılışta yine denenir */ });
 }
 
 /** İsim sorulmadıysa önce onu sor; kaydedince devam et */
@@ -87,7 +85,7 @@ function isimSor(devam) {
     if (ad.length < 2) { alan.focus(); return; }
     update({ kullanan: ad });
     devam();
-    kullanimBildir();
+    kullananBildir();
   };
   setTimeout(() => { try { alan.focus(); } catch { /* yoksay */ } }, 500);
 }
@@ -100,7 +98,7 @@ function goHospitals() {
   // Ana hastane yalnızca ilk açılışta burada belirlenir; sonrasında Ayarlar'dan.
   // Izgaraya sonradan girmek sadece o hastaneye bakmak demek, seçimi değiştirmez.
   UI.renderHospitals(db(), today(), opts(), (id) => {
-    if (!settings().homeHospitalId) update({ homeHospitalId: id });
+    if (!settings().homeHospitalId) { update({ homeHospitalId: id }); kullananBildir(); }
     goDay(id);
   }, hospitalsOrdered(), settings().homeHospitalId);
   UI.setTone('pick', null);
@@ -173,6 +171,7 @@ function syncActive() {
 
 function openSettings() {
   Sheet.openSettings(db(), today(), () => {
+    kullananBildir();
     if (onDayScreen) goDay(panels[active] ? panels[active].h.id : settings().homeHospitalId);
     else goHospitals();
   });
@@ -253,7 +252,7 @@ async function kendiniOnar(err) {
       const last = params.get('h') || settings().homeHospitalId;
       if (db().hospitals.some((h) => h.id === last)) goDay(last); else goHospitals();
     };
-    if (settings().kullanan) { ac(); kullanimBildir(); } else { isimSor(ac); }
+    if (settings().kullanan) { ac(); kullananBildir(); } else { isimSor(ac); }
   } catch (err) {
     await kendiniOnar(err);
     return;

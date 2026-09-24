@@ -134,7 +134,7 @@ export function openSettings(db, date, onSaved) {
     <div class="set">
       <p class="eyebrow">Kullanan kişi</p>
       <div class="set-row">
-        <label>Bu paneli kim kullanıyor<small>Kimlerin kullandığını görebilmek için</small></label>
+        <label>Bu paneli kim kullanıyor<small>Yalnızca ad ve hastane; giriş kaydı tutulmaz</small></label>
         <input type="text" data-kullanan value="${esc(s.kullanan || '')}"
                placeholder="Ad Soyad" maxlength="60" autocapitalize="words">
       </div>
